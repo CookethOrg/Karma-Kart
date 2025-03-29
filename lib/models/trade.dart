@@ -11,6 +11,7 @@ class Trade {
   int hoursPerDay;
   // Urgency urgency;
   bool isFav;
+  bool isLive;
 
   Trade({
     required this.tradeId,
@@ -23,6 +24,7 @@ class Trade {
     required this.tags,
     // this.urgency = Urgency.medium,
     this.isFav = false,
+    this.isLive = true,
   });
 
   Map<String, dynamic> toJson() {
@@ -37,28 +39,32 @@ class Trade {
       "hoursPerDay": hoursPerDay,
       // "urgency": urgency,
       "isFav": isFav,
+      'isLive': isLive,
     };
   }
 
   factory Trade.fromJson(Map<String, dynamic> json) {
-    Trade trade = Trade(
+    return Trade(
       tradeId: json["tradeId"],
       heading: json["heading"],
       clientUserId: json["clientUserId"],
       description: json["description"],
-      price: json["price"],
-      tags: json["tags"],
+      // Convert price to double
+      price:
+          json["price"] is int
+              ? (json["price"] as int).toDouble()
+              : json["price"],
+      // Convert tags to List<String>
+      tags: (json["tags"] as List).map((item) => item.toString()).toList(),
       expectedDeliveryTime: json["expectedDeliveryTime"],
-      hoursPerDay: json["hoursPerDay"],
-      // urgency: json["urgency"],
-      isFav: json["isFav"],
+      // Ensure hoursPerDay is an int
+      hoursPerDay:
+          json["hoursPerDay"] is int
+              ? json["hoursPerDay"]
+              : int.parse(json["hoursPerDay"].toString()),
+      // Ensure boolean fields
+      isFav: json["isFav"] is bool ? json["isFav"] : json["isFav"] == true,
+      isLive: json["isLive"] is bool ? json["isLive"] : json["isLive"] == true,
     );
-    // if (json["tags"] != null) {
-    //   for (var i in json["tags"]) {
-    //     trade.tags.add(i);
-    //   }
-    // }
-
-    return trade;
   }
 }
