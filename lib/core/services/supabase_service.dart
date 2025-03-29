@@ -68,7 +68,7 @@ class SupabaseService extends StateHandler {
     // skills bhi daalne hoge
     required List<String> socialLinks,
     required String bio,
-    required File imageFile,
+    // required File imageFile,
   }) async {
     String res = "Some error occurred";
 
@@ -122,7 +122,7 @@ class SupabaseService extends StateHandler {
           'balance': newUser.balance,
         });
 
-        ImageServices(supabase).uploadImage(imageFile, user.id, true);
+        // ImageServices(supabase).uploadImage(imageFile, user.id, true);
 
         res = "Signed Up Successfully";
       }

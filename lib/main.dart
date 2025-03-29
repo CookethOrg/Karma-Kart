@@ -78,9 +78,9 @@ class MyApp extends StatelessWidget {
         // home: ProfilePage(),
         // home: TradeDetailsPage(),
         // home: Splash(),
-        home: LogIn(),
-        // home: TradeCreationPage(),
         // home: LogIn(),
+        // home: TradeCreationPage(),
+        home: SignUp(),
         // home: VerifyDetails(),
       ),
     );

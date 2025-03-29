@@ -253,7 +253,7 @@ class VerifyDetails extends StatelessWidget {
                     onPressed: () async {
                       auth.setLoading(true);
                       String res = await auth.createNewUser(
-                        imageFile: auth.image!,
+                        // imageFile: auth.image!,
                         userName: auth.usernameController.text,
                         email: auth.emailController.text,
                         password: auth.passwordController.text,
