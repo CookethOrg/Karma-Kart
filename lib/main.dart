@@ -73,6 +73,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(fontFamily: 'Inter'),
         debugShowCheckedModeBanner: false,
         home: LogIn(),
+        // home: SignUp(),
         // home: RecommendedForYouPage(),
         // home: ProfilePage(),
         // home: TradeDetailsPage(),

@@ -113,6 +113,13 @@ class TradeProvider extends StateHandler {
     }
   }
 
+  Future<String> fetchClientUserName(Trade trade) async {
+    final id = trade.clientUserId;
+    final res =
+        await supabaseClient.from('User').select('name').eq('id', id).single();
+    return res['name'];
+  }
+
   // Remove a tag
   void removeTag(String tag) {
     _selectedTags.remove(tag);

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:karmakart/core/services/supabase_service.dart';
 import 'package:karmakart/core/widgets/dashboard_search_bar.dart';
 import 'package:karmakart/core/widgets/drawers/dashboard_drawer.dart';
 import 'package:karmakart/models/trade.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
+import 'package:karmakart/providers/trade_provider.dart';
 import 'package:karmakart/screens/dashboard_page.dart';
 import 'package:provider/provider.dart';
 import 'package:radix_icons/radix_icons.dart';
@@ -93,27 +95,32 @@ class _TradeDetailsPageState extends State<TradeDetailsPage> {
   }
 
   Widget _buildUserInfo() {
-    return Row(
-      children: [
-        CircleAvatar(
-          radius: 30.r,
-          backgroundColor: Colors.grey[700],
-          backgroundImage: AssetImage('assets/images-3.jpeg'),
-        ),
-        SizedBox(width: 10.w),
-        Text(
-          "Kat Dunphy",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 30.sp,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        SizedBox(width: 5.w),
-        Icon(Icons.verified, color: Colors.blue, size: 30.sp),
-      ],
-    );
-  }
+    return Consumer<TradeProvider>(
+      builder: (context, supa, child) {
+        // final name = await supa.fetchClientUserName(widget.trade);
+        return Row(
+              children: [
+                CircleAvatar(
+                  radius: 30.r,
+                  backgroundColor: Colors.grey[700],
+                  backgroundImage: AssetImage('assets/images-3.jpeg'),
+                ),
+                SizedBox(width: 10.w),
+                Text(
+                'hey',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(width: 5.w),
+                Icon(Icons.verified, color: Colors.blue, size: 30.sp),
+              ],
+            );
+          },
+        );
+      }
 
   Widget _buildJobDescription() {
     return Text(
@@ -124,24 +131,34 @@ class _TradeDetailsPageState extends State<TradeDetailsPage> {
 
   Widget _buildSkillTags() {
     return Row(
-      children: widget.trade.tags.map((skill) => Container(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 3.h),
-        decoration: BoxDecoration(
-          color: Color(0xFF1D1F2E),
-          borderRadius: BorderRadius.circular(8.r),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(skill, style: TextStyle(color: Colors.white, fontSize: 20.sp)),
-            SizedBox(width: 4.w),
-            // Icon(Icons.close, color: Colors.white, size: 14.sp),
-          ],
-        ),
-      )).toList(),
+      children:
+          widget.trade.tags
+              .map(
+                (skill) => Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 3.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF1D1F2E),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        skill,
+                        style: TextStyle(color: Colors.white, fontSize: 20.sp),
+                      ),
+                      SizedBox(width: 4.w),
+                      // Icon(Icons.close, color: Colors.white, size: 14.sp),
+                    ],
+                  ),
+                ),
+              )
+              .toList(),
     );
   }
-
 
   Widget _buildDeliveryDate() {
     return Row(

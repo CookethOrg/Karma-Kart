@@ -4,6 +4,7 @@ import 'package:karmakart/core/widgets/buttons/authbuttons.dart';
 import 'package:karmakart/core/widgets/textformfields/auth_form_field.dart';
 import 'package:karmakart/models/form_field_data.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
+import 'package:karmakart/screens/auth_screens/log_in.dart';
 import 'package:karmakart/screens/auth_screens/skill_selection.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -243,7 +244,9 @@ class _SignupBottomState extends State<SignupBottom> {
                           backgroundColor: const Color(0xFF101123),
                           textColor: Colors.white,
                           onPressed: () {
-                            // Navigate to login screen
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(builder: (context) => LogIn()),
+                            );
                           },
                         ),
                       ),
