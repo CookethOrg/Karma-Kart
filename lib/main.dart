@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'screens/auth_screens/sign_up.dart';
 import 'providers/transaction_history_provider.dart';
+import 'screens/trade_details_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -70,7 +71,7 @@ class MyApp extends StatelessWidget {
         title: 'Karma Kart',
         theme: ThemeData(fontFamily: 'Inter'),
         debugShowCheckedModeBanner: false,
-        home: LogIn(),
+        home: TradeDetailsPage(),
         // home: TradeCreationPage(),
         // home: LogIn(),
         // home: VerifyDetails(),
