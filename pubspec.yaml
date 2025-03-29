@@ -39,6 +39,7 @@ dependencies:
   flutter_dotenv: ^5.2.1
   supabase_flutter: ^2.8.4
   radix_icons: ^1.0.1
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:
@@ -64,7 +65,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets
+    - assets/
     - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
