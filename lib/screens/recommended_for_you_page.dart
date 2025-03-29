@@ -3,6 +3,7 @@ import 'package:karmakart/core/widgets/dashboard_search_bar.dart';
 import 'package:karmakart/core/widgets/drawers/dashboard_drawer.dart';
 import 'package:karmakart/core/widgets/trade_card.dart';
 import 'package:karmakart/providers/trade_provider.dart';
+import 'package:karmakart/screens/trade_details_page.dart';
 import '../core/widgets/trade_card_rfy.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
 import 'package:karmakart/screens/create_trade.dart';
@@ -228,7 +229,15 @@ class _RecommendedForYouPageState extends State<RecommendedForYouPage> {
                       tp.tradeList
                           .map(
                             (trade) => GestureDetector(
-                              onTap: (){},
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) =>
+                                            TradeDetailsPage(trade: trade),
+                                  ),
+                                );
+                              },
                               child: Padding(
                                 padding: EdgeInsets.only(right: 20.w),
                                 child: TradeCard(
