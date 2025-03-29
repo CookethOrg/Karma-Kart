@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import '../core/widgets/top_bar_th.dart';
 import '../core/widgets/search_bar_th.dart';
 import '../core/widgets/transaction_item_th.dart';
+import '../providers/transaction_history_provider.dart';
+import 'payment_completion.dart';
 
 class TransactionHistoryPage extends StatelessWidget {
-  final List<Map<String, dynamic>> transactions = [
-    {'name': 'Mike Wazuski', 'date': '25 March, 6:30 p.m.', 'points': -200},
-    {'name': 'Hehe Hehe', 'date': '25 March, 4:30 p.m.', 'points': 30},
-    {'name': 'Mike Wazuski', 'date': '24 March, 6:30 p.m.', 'points': -200},
-    {'name': 'Hehe Hehe', 'date': '24 March, 4:30 p.m.', 'points': 30},
-  ];
-
   @override
   Widget build(BuildContext context) {
+    // Access transactions from provider
+    final transactionData = Provider.of<TransactionProvider>(context);
+    final transactions = transactionData.transactions;
+
     return Scaffold(
       backgroundColor: const Color(0xFF020315),
       body: SafeArea(
         child: Column(
           children: [
-            const TopBar(), // Replaced _buildTopBar
+            const TopBar(),
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
@@ -44,9 +44,9 @@ class TransactionHistoryPage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 10.h),
-                      const SearchBarTransaction(), // Replaced _buildSearchBar
+                      const SearchBarTransaction(),
                       SizedBox(height: 10.h),
-                      ..._buildTransactionSections(), // Still uses helper method
+                      ..._buildTransactionSections(context, transactions),
                     ],
                   ),
                 ),
@@ -58,11 +58,14 @@ class TransactionHistoryPage extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildTransactionSections() {
-    Map<String, List<Map<String, dynamic>>> groupedTransactions = {};
+  List<Widget> _buildTransactionSections(
+    BuildContext context,
+    List<Transaction> transactions,
+  ) {
+    Map<String, List<Transaction>> groupedTransactions = {};
 
     for (var transaction in transactions) {
-      String dateKey = _getDateKey(transaction['date']);
+      String dateKey = _getDateKey(transaction.date);
       groupedTransactions.putIfAbsent(dateKey, () => []).add(transaction);
     }
 
@@ -83,10 +86,21 @@ class TransactionHistoryPage extends StatelessWidget {
           ),
           ...entry.value.map(
             (transaction) => TransactionItem(
-              name: transaction['name'],
-              date: transaction['date'],
-              points: transaction['points'],
-              isPositive: transaction['points'] > 0,
+              name: transaction.name,
+              date: transaction.date,
+              points: transaction.points,
+              isPositive: transaction.isPositive,
+              onTap: () {
+                // Navigate to payment completion page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) =>
+                            PaymentCompletionPage(transaction: transaction),
+                  ),
+                );
+              },
             ),
           ),
         ],
