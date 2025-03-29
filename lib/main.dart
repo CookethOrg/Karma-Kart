@@ -14,6 +14,7 @@ import 'package:karmakart/screens/auth_screens/splash.dart';
 import 'package:karmakart/screens/create_trade.dart';
 import 'package:karmakart/screens/dashboard_page.dart';
 import 'package:karmakart/screens/recommended_for_you_page.dart';
+import 'package:karmakart/screens/profile.dart';
 import 'package:karmakart/screens/transaction_history.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -74,6 +75,10 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: AllTradesPage(),
         // home: RecommendedForYouPage(),
+        // home: ProfilePage(),
+        // home: TradeDetailsPage(),
+        // home: Splash(),
+        // home: LogIn(),
         // home: TradeCreationPage(),
         // home: LogIn(),
         // home: VerifyDetails(),
