@@ -227,11 +227,14 @@ class _RecommendedForYouPageState extends State<RecommendedForYouPage> {
                   children:
                       tp.tradeList
                           .map(
-                            (trade) => Padding(
-                              padding: EdgeInsets.only(right: 20.w),
-                              child: TradeCard(
-                                trade: trade,
-                                cardType: TradeCardType.recommended,
+                            (trade) => GestureDetector(
+                              onTap: (){},
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 20.w),
+                                child: TradeCard(
+                                  trade: trade,
+                                  cardType: TradeCardType.recommended,
+                                ),
                               ),
                             ),
                           )
