@@ -2,14 +2,21 @@ import 'package:flutter/material.dart';
 
 class SignupHead extends StatelessWidget {
   int pageIndex;
-  SignupHead({super.key, required this.pageIndex});
+  String heading;
+  bool isPageIndexVisible;
+  SignupHead({
+    super.key,
+    required this.pageIndex,
+    this.heading = 'Sign up Account',
+    this.isPageIndexVisible = true
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Text(
-          'Sign up Account',
+        Text(
+          heading,
           style: TextStyle(
             color: Colors.white,
             fontSize: 24,
@@ -17,7 +24,7 @@ class SignupHead extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 27),
-        SizedBox(
+        isPageIndexVisible ? SizedBox(
           width: 164,
           child: Column(
             children: [
@@ -50,7 +57,7 @@ class SignupHead extends StatelessWidget {
               ),
             ],
           ),
-        ),
+        ) : SizedBox(),
       ],
     );
   }
