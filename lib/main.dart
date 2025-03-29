@@ -6,6 +6,7 @@ import 'package:karmakart/core/services/supabase_service.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
 import 'package:karmakart/providers/trade_provider.dart';
 import 'package:karmakart/screens/auth_screens/log_in.dart';
+import 'package:karmakart/screens/auth_screens/splash.dart';
 import 'package:karmakart/screens/create_trade.dart';
 import 'package:karmakart/screens/dashboard_page.dart';
 import 'package:karmakart/screens/transaction_history.dart';
@@ -63,7 +64,8 @@ class MyApp extends StatelessWidget {
         title: 'Karma Kart',
         theme: ThemeData(fontFamily: 'Inter'),
         debugShowCheckedModeBanner: false,
-        home: LogIn(),
+        home: Splash(),
+        // home: LogIn(),
         // home: TradeCreationPage(),
       ),
     );
