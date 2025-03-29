@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:karmakart/models/trade.dart';
 
 enum TradeCardType {
@@ -19,7 +20,7 @@ class TradeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 250,
+      width: 700.w,
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
