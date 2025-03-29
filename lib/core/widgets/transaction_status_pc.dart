@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'transcation_id_pc.dart';
+import 'package:karmakart/core/widgets/transaction_id_pc.dart';
+
 
 class TransactionStatus extends StatelessWidget {
   final String amount;
