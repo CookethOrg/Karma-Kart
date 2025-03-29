@@ -99,28 +99,28 @@ class _TradeDetailsPageState extends State<TradeDetailsPage> {
       builder: (context, supa, child) {
         // final name = await supa.fetchClientUserName(widget.trade);
         return Row(
-              children: [
-                CircleAvatar(
-                  radius: 30.r,
-                  backgroundColor: Colors.grey[700],
-                  backgroundImage: AssetImage('assets/images-3.jpeg'),
-                ),
-                SizedBox(width: 10.w),
-                Text(
-                'hey',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(width: 5.w),
-                Icon(Icons.verified, color: Colors.blue, size: 30.sp),
-              ],
-            );
-          },
+          children: [
+            CircleAvatar(
+              radius: 30.r,
+              backgroundColor: Colors.grey[700],
+              backgroundImage: AssetImage('assets/images-3.jpeg'),
+            ),
+            SizedBox(width: 10.w),
+            Text(
+              'hey',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 30.sp,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            SizedBox(width: 5.w),
+            Icon(Icons.verified, color: Colors.blue, size: 30.sp),
+          ],
         );
-      }
+      },
+    );
+  }
 
   Widget _buildJobDescription() {
     return Text(
@@ -176,25 +176,28 @@ class _TradeDetailsPageState extends State<TradeDetailsPage> {
   }
 
   Widget _buildRequestButton() {
-    return Center(
-      child: Container(
-        width: 300.w,
-        height: 20.h,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.r),
-        ),
-        child: Center(
-          child: Text(
-            "Send Request",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 25.sp,
-              fontWeight: FontWeight.bold,
+    return GestureDetector(
+          onTap: () {},
+          child: Center(
+            child: Container(
+              width: 300.w,
+              height: 20.h,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+              child: Center(
+                child: Text(
+                  "Send Request",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 25.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        );
   }
 }

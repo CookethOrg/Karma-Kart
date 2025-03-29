@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:karmakart/core/utils/state_handler.dart';
+import 'package:karmakart/core/utils/utils.dart';
 import 'package:karmakart/models/trade.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
@@ -16,8 +17,43 @@ class TradeProvider extends StateHandler {
   final TextEditingController _karmaPointsController = TextEditingController();
   final TextEditingController _deliveryDateController = TextEditingController();
   final List<Trade> _tradeList = [];
-  List<Trade> _postedTrades = [];
+  final List<Trade> _postedTrades = [];
   bool _isLoading = false;
+  final List<Trade> _yourTrades = [
+    Trade(
+      tradeId: '1',
+      tradeProgress: TradeProgress.ongoing,
+      approachee: '2',
+      clientUserId: 'clientUserId',
+      heading: 'heading',
+      description: 'description',
+      price: 1,
+      expectedDeliveryTime: 'expectedDeliveryTime',
+      tags: [],
+    ),
+    Trade(
+      tradeId: '2',
+      clientUserId: 'clientUserId',
+      tradeProgress: TradeProgress.ongoing,
+      approachee: '2',
+      heading: 'heading',
+      description: 'description',
+      price: 1,
+      expectedDeliveryTime: 'expectedDeliveryTime',
+      tags: [],
+    ),
+    Trade(
+      tradeId: '3',
+      clientUserId: 'clientUserId',
+      tradeProgress: TradeProgress.ongoing,
+      approachee: '2',
+      heading: 'heading',
+      description: 'description',
+      price: 1,
+      expectedDeliveryTime: 'expectedDeliveryTime',
+      tags: [],
+    ),
+  ];
 
   // Other trade data
   // DateTime? _startDate;
@@ -50,6 +86,7 @@ class TradeProvider extends StateHandler {
   List<Trade> get tradeList => _tradeList;
   List<Trade> get postedTrades => _postedTrades;
   bool get isLoading => _isLoading;
+  List<Trade> get yourTrades => _yourTrades;
 
   // Duration setter
   void setDuration(DateTime? end) {
@@ -78,7 +115,7 @@ class TradeProvider extends StateHandler {
       var response = await supabaseClient
           .from('Trade')
           .select()
-          .eq('isLive', true);
+          .eq('tradeProgress', 'live');
       var ures = await supabaseClient
           .from('Trade')
           .select()
@@ -197,6 +234,8 @@ class TradeProvider extends StateHandler {
       String txid = Uuid().v4();
       final userId = supabaseClient.auth.currentUser?.id;
       final newTrade = Trade(
+        tradeProgress: TradeProgress.live,
+        approachee: '',
         tradeId: txid,
         heading: heading,
         clientUserId: userId!,
@@ -211,6 +250,8 @@ class TradeProvider extends StateHandler {
         'clientUserId': newTrade.clientUserId,
         'heading': newTrade.heading,
         'description': newTrade.description,
+        'tradeProgress' : newTrade.tradeProgress.toString(),
+        'approachee' : newTrade.approachee,
         'tags': newTrade.tags,
         'price': newTrade.price,
         'expectedDeliveryTime': newTrade.expectedDeliveryTime,

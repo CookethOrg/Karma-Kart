@@ -78,7 +78,7 @@ class TradeCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
-            trade.isLive ? 'Live' : 'Check Request',
+            trade.tradeProgress.name,
             style: TextStyle(
               color: const Color(0xffffa629),
               fontSize: 10,
