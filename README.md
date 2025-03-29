@@ -1,8 +1,22 @@
-# Karma Kart
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/3f3d956d-d6de-40b8-aef8-3b884e298c00" alt="Karma Kart Logo" width="300">
+  
+  <h2>Karma Kart</h2>
+  <h3>A service-for-service exchange platform – where skills, not money, fuel the marketplace.</h3>
 
-**A service-for-service exchange platform – where skills, not money, fuel the marketplace.**
+  <br/>
+
+  [![Welcome to my profile](https://img.shields.io/badge/Hello,Programmer!-Welcome-blue.svg?style=flat&logo=github)](https://github.com/CookethOrg)
+  [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/CookethOrg/Karma-Kart)
+  ![Stars](https://img.shields.io/github/stars/CookethOrg/Karma-Kart?style=flat&logo=github)
+  ![Forks](https://img.shields.io/github/forks/CookethOrg/Karma-Kart?style=flat&logo=github)
+
+</div>
 
 ---
+
+
+
 
 ## 🚀 About Karma Kart  
 Karma Kart is a unique **service exchange platform**, much like Upwork or Fiverr, but without monetary transactions. Instead, users **trade skills and services**, ensuring fair exchanges through **Karma Points (KP)**, which are earned and used within the system. Whether you're a designer, developer, writer, or marketer, you can barter your expertise in return for the services you need.
