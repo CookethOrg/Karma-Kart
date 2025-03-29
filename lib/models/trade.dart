@@ -15,7 +15,7 @@ class Trade {
   Trade({
     required this.tradeId,
     required this.clientUserId,
-    this.heading = "New Trade",
+    required this.heading,
     required this.description,
     required this.price,
     required this.expectedDeliveryTime,
@@ -43,6 +43,7 @@ class Trade {
   factory Trade.fromJson(Map<String, dynamic> json) {
     Trade trade = Trade(
       tradeId: json["tradeId"],
+      heading: json["heading"],
       clientUserId: json["clientUserId"],
       description: json["description"],
       price: json["price"],

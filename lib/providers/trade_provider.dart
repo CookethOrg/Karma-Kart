@@ -110,6 +110,7 @@ class TradeProvider extends StateHandler {
       final userId = supabaseClient.auth.currentUser?.id;
       final newTrade = Trade(
         tradeId: txid,
+        heading: heading,
         clientUserId: userId!,
         description: description,
         tags: tags,

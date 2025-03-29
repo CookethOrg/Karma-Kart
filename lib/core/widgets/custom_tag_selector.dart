@@ -26,6 +26,7 @@ class _CustomTagSelectorState extends State<CustomTagSelector> {
   bool _isSearching = false;
   double _overlayOffset = 0;
   bool _showAbove = false;
+  bool _isDisposed = false;
 
   @override
   void initState() {
@@ -34,7 +35,9 @@ class _CustomTagSelectorState extends State<CustomTagSelector> {
       if (_focusNode.hasFocus) {
         // Add a small delay to ensure keyboard is fully shown before showing overlay
         Future.delayed(const Duration(milliseconds: 100), () {
-          _showOverlay();
+          if (!_isDisposed) {
+            _showOverlay();
+          }
         });
       } else {
         _hideOverlay();
@@ -44,9 +47,11 @@ class _CustomTagSelectorState extends State<CustomTagSelector> {
     // Initialize with any provided tags
     if (widget.initialTags != null && widget.initialTags!.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        final provider = Provider.of<TradeProvider>(context, listen: false);
-        for (final tag in widget.initialTags!) {
-          provider.addTag(tag);
+        if (!_isDisposed && mounted) {
+          final provider = Provider.of<TradeProvider>(context, listen: false);
+          for (final tag in widget.initialTags!) {
+            provider.addTag(tag);
+          }
         }
       });
     }
@@ -54,6 +59,7 @@ class _CustomTagSelectorState extends State<CustomTagSelector> {
 
   @override
   void dispose() {
+    _isDisposed = true;
     _hideOverlay();
     _focusNode.dispose();
     _searchController.dispose();
@@ -61,6 +67,8 @@ class _CustomTagSelectorState extends State<CustomTagSelector> {
   }
 
   void _showOverlay() {
+    if (_isDisposed || !mounted) return;
+    
     final RenderBox renderBox = context.findRenderObject() as RenderBox;
     final size = renderBox.size;
 
@@ -92,45 +100,51 @@ class _CustomTagSelectorState extends State<CustomTagSelector> {
     }
 
     _overlayEntry = OverlayEntry(
-      builder:
-          (context) => Positioned(
-            width: size.width,
-            child: CompositedTransformFollower(
-              link: _layerLink,
-              showWhenUnlinked: false,
-              offset: Offset(0, _overlayOffset),
-              child: Material(
-                elevation: 4,
-                borderRadius: BorderRadius.circular(12.r),
-                color: const Color(0xFF1A1E2E),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight:
-                        _showAbove
-                            ? min(dropdownHeight, availableSpaceAbove - 16.h)
-                            : min(dropdownHeight, availableSpaceBelow - 16.h),
-                    maxWidth: size.width,
-                  ),
-                  child: _buildSearchDropdown(),
-                ),
+      builder: (context) => Positioned(
+        width: size.width,
+        child: CompositedTransformFollower(
+          link: _layerLink,
+          showWhenUnlinked: false,
+          offset: Offset(0, _overlayOffset),
+          child: Material(
+            elevation: 4,
+            borderRadius: BorderRadius.circular(12.r),
+            color: const Color(0xFF1A1E2E),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight:
+                    _showAbove
+                        ? min(dropdownHeight, availableSpaceAbove - 16.h)
+                        : min(dropdownHeight, availableSpaceBelow - 16.h),
+                maxWidth: size.width,
               ),
+              child: _buildSearchDropdown(),
             ),
           ),
+        ),
+      ),
     );
 
-    Overlay.of(context).insert(_overlayEntry!);
-    setState(() => _isSearching = true);
+    if (!_isDisposed && mounted) {
+      Overlay.of(context).insert(_overlayEntry!);
+      setState(() => _isSearching = true);
+    }
   }
 
   // Helper function to get the minimum of two numbers
   double min(double a, double b) => a < b ? a : b;
 
   void _hideOverlay() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
-    setState(() {
-      _isSearching = false;
-    });
+    if (_overlayEntry != null) {
+      _overlayEntry!.remove();
+      _overlayEntry = null;
+    }
+    
+    if (!_isDisposed && mounted) {
+      setState(() {
+        _isSearching = false;
+      });
+    }
   }
 
   Widget _buildSearchDropdown() {
