@@ -6,6 +6,7 @@ import 'package:karmakart/models/trade.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
 import 'package:karmakart/providers/trade_provider.dart';
 import 'package:karmakart/screens/create_trade.dart';
+import 'package:karmakart/screens/trade_details_page.dart';
 import 'package:provider/provider.dart';
 import 'recommended_for_you_page.dart';
 
@@ -209,7 +210,15 @@ class _DashboardPageState extends State<DashboardPage> {
                     tp.tradeList
                         .map(
                           (trade) => GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) =>
+                                          TradeDetailsPage(trade: trade),
+                                ),
+                              );
+                            },
                             child: Padding(
                               padding: const EdgeInsets.only(right: 16),
                               child: TradeCard(
