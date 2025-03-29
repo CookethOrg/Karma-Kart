@@ -185,7 +185,12 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                 ),
                 InkWell(
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => RecommendedForYouPage(),)),
+                  onTap:
+                      () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => RecommendedForYouPage(),
+                        ),
+                      ),
                   child: Text(
                     'View More >',
                     style: TextStyle(
@@ -203,11 +208,14 @@ class _DashboardPageState extends State<DashboardPage> {
                 children:
                     tp.tradeList
                         .map(
-                          (trade) => Padding(
-                            padding: const EdgeInsets.only(right: 16),
-                            child: TradeCard(
-                              trade: trade,
-                              cardType: TradeCardType.recommended,
+                          (trade) => GestureDetector(
+                            onTap: () {},
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 16),
+                              child: TradeCard(
+                                trade: trade,
+                                cardType: TradeCardType.recommended,
+                              ),
                             ),
                           ),
                         )
