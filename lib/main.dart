@@ -9,6 +9,7 @@ import 'package:karmakart/screens/auth_screens/bio_profile.dart';
 import 'package:karmakart/screens/auth_screens/log_in.dart';
 import 'package:karmakart/screens/auth_screens/skill_selection.dart';
 import 'package:karmakart/screens/auth_screens/verify_details.dart';
+import 'package:karmakart/screens/auth_screens/splash.dart';
 import 'package:karmakart/screens/create_trade.dart';
 import 'package:karmakart/screens/dashboard_page.dart';
 import 'package:karmakart/screens/recommended_for_you_page.dart';
@@ -70,6 +71,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(fontFamily: 'Inter'),
         debugShowCheckedModeBanner: false,
         // home: RecommendedForYouPage(),
+        home: Splash(),
+        // home: LogIn(),
         // home: TradeCreationPage(),
         home: LogIn(),
         // home: VerifyDetails(),

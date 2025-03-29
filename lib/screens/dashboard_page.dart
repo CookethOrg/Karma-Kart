@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:karmakart/core/widgets/dashboard_search_bar.dart';
 import 'package:karmakart/core/widgets/drawers/dashboard_drawer.dart';
 import 'package:karmakart/core/widgets/trade_card.dart';
+import 'package:karmakart/models/trade.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
+import 'package:karmakart/providers/trade_provider.dart';
 import 'package:karmakart/screens/create_trade.dart';
 import 'package:provider/provider.dart';
 import 'recommended_for_you_page.dart';
@@ -45,34 +47,38 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Color(0xFF020315),
-      drawer: DashboardDrawer(),
-      body: SafeArea(
-        top: true,
-        minimum: EdgeInsets.only(top: 20), // Added top padding here
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildTopBar(),
-                SizedBox(height: 24),
-                _buildGreetingSection("Daniel"),
-                SizedBox(height: 24),
-                DashboardSearchBar(),
-                SizedBox(height: 24),
-                _buildRecommendedSection(),
-                SizedBox(height: 24),
-                _buildTradesSection(),
-              ],
+    return Consumer<TradeProvider>(
+      builder: (context, tp, child) {
+        return Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: Color(0xFF020315),
+          drawer: DashboardDrawer(),
+          body: SafeArea(
+            top: true,
+            minimum: EdgeInsets.only(top: 20), // Added top padding here
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildTopBar(),
+                    SizedBox(height: 24),
+                    _buildGreetingSection("Daniel"),
+                    SizedBox(height: 24),
+                    DashboardSearchBar(),
+                    SizedBox(height: 24),
+                    _buildRecommendedSection(),
+                    SizedBox(height: 24),
+                    _buildTradesSection(),
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
-      bottomNavigationBar: _buildBottomNavBar(),
+          bottomNavigationBar: _buildBottomNavBar(),
+        );
+      },
     );
   }
 
@@ -163,54 +169,51 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Widget _buildRecommendedSection() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Consumer<TradeProvider>(
+      builder: (context, tp, child) {
+        return Column(
           children: [
-            Text(
-              'Recommended for you',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RecommendedForYouPage(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Recommended for you',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                   ),
-                );
-              },
-              child: Text(
-                'View More >',
-                style: TextStyle(color: const Color(0xff874fff), fontSize: 12),
+                ),
+                Text(
+                  'View More >',
+                  style: TextStyle(
+                    color: const Color(0xff874fff),
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children:
+                    tp.tradeList
+                        .map(
+                          (trade) => Padding(
+                            padding: const EdgeInsets.only(right: 16),
+                            child: TradeCard(
+                              trade: trade,
+                              cardType: TradeCardType.recommended,
+                            ),
+                          ),
+                        )
+                        .toList(),
               ),
             ),
           ],
-        ),
-        SizedBox(height: 16),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children:
-                _recommendedTrades
-                    .map(
-                      (trade) => Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: TradeCard(
-                          trade: trade,
-                          cardType: TradeCardType.recommended,
-                        ),
-                      ),
-                    )
-                    .toList(),
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 
@@ -244,7 +247,15 @@ class _DashboardPageState extends State<DashboardPage> {
                       (trade) => Padding(
                         padding: const EdgeInsets.only(right: 16),
                         child: TradeCard(
-                          trade: trade,
+                          trade: Trade(
+                            tradeId: 'fefeev',
+                            clientUserId: 'clientUserId',
+                            heading: 'heading',
+                            description: 'description',
+                            price: 5,
+                            expectedDeliveryTime: 'expectedDeliveryTime',
+                            tags: [],
+                          ),
                           cardType: TradeCardType.active,
                         ),
                       ),

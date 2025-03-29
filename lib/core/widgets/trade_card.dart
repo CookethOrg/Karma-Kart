@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:karmakart/models/trade.dart';
 
 enum TradeCardType {
   recommended,
@@ -6,7 +7,7 @@ enum TradeCardType {
 }
 
 class TradeCard extends StatelessWidget {
-  final Map<String, String> trade;
+  final Trade trade;
   final TradeCardType cardType;
 
   const TradeCard({
@@ -37,7 +38,7 @@ class TradeCard extends StatelessWidget {
           ),
           SizedBox(height: cardType == TradeCardType.recommended ? 12 : 16),
           Text(
-            trade['title'] ?? '',
+            trade.heading,
             style: TextStyle(
               color: Colors.white,
               fontSize: 16,
@@ -48,7 +49,7 @@ class TradeCard extends StatelessWidget {
           _buildCardBody(),
           if (cardType == TradeCardType.recommended) ...[
             SizedBox(height: 12),
-            _buildSkillTags(trade['skills']?.split(', ') ?? []),
+            _buildSkillTags(trade.tags),
           ],
         ],
       ),
@@ -61,7 +62,7 @@ class TradeCard extends StatelessWidget {
         CircleAvatar(
           backgroundColor: Color(0xFF020315),
           child: Text(
-            trade['name']?[0] ?? '',
+            trade.heading,
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -76,7 +77,7 @@ class TradeCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
-            trade['status'] ?? '',
+            trade.isLive ? 'Live' : 'Check Request',
             style: TextStyle(
               color: const Color(0xffffa629),
               fontSize: 10,
@@ -95,14 +96,14 @@ class TradeCard extends StatelessWidget {
   Widget _buildCardBody() {
     if (cardType == TradeCardType.recommended) {
       return Text(
-        trade['description'] ?? '',
+        trade.description,
         style: TextStyle(color: Color(0xFF656678), fontSize: 12),
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
       );
     } else {
       return Text(
-        trade['points'] ?? '',
+        trade.price.toString(),
         style: TextStyle(color: Color(0xFF656678), fontSize: 14),
       );
     }
