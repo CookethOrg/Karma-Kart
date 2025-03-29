@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:karmakart/core/widgets/dashboard_search_bar.dart';
 import 'package:karmakart/core/widgets/drawers/dashboard_drawer.dart';
+import 'package:karmakart/core/widgets/trade_card.dart';
+import 'package:karmakart/providers/trade_provider.dart';
 import '../core/widgets/trade_card_rfy.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
 import 'package:karmakart/screens/create_trade.dart';
@@ -18,6 +20,84 @@ class RecommendedForYouPage extends StatefulWidget {
 
 class _RecommendedForYouPageState extends State<RecommendedForYouPage> {
   final List<Map<String, String>> _recommendedTrades = [
+    {
+      'name': 'Kat Dunphy',
+      'title': 'React Website Developer',
+      'description':
+          'I need a react developer who can code my static portfolio website',
+      'skills': 'Web Development, React',
+    },
+    {
+      'name': 'Kat Dunphy',
+      'title': 'React Website',
+      'description': 'I need a react developer who can code my static',
+      'skills': 'Web Development, React',
+    },
+    {
+      'name': 'Kat Dunphy',
+      'title': 'React Website Developer',
+      'description':
+          'I need a react developer who can code my static portfolio website',
+      'skills': 'Web Development, React',
+    },
+    {
+      'name': 'Kat Dunphy',
+      'title': 'React Website',
+      'description': 'I need a react developer who can code my static',
+      'skills': 'Web Development, React',
+    },
+    {
+      'name': 'Kat Dunphy',
+      'title': 'React Website Developer',
+      'description':
+          'I need a react developer who can code my static portfolio website',
+      'skills': 'Web Development, React',
+    },
+    {
+      'name': 'Kat Dunphy',
+      'title': 'React Website',
+      'description': 'I need a react developer who can code my static',
+      'skills': 'Web Development, React',
+    },
+    {
+      'name': 'Kat Dunphy',
+      'title': 'React Website Developer',
+      'description':
+          'I need a react developer who can code my static portfolio website',
+      'skills': 'Web Development, React',
+    },
+    {
+      'name': 'Kat Dunphy',
+      'title': 'React Website',
+      'description': 'I need a react developer who can code my static',
+      'skills': 'Web Development, React',
+    },
+    {
+      'name': 'Kat Dunphy',
+      'title': 'React Website Developer',
+      'description':
+          'I need a react developer who can code my static portfolio website',
+      'skills': 'Web Development, React',
+    },
+    {
+      'name': 'Kat Dunphy',
+      'title': 'React Website',
+      'description': 'I need a react developer who can code my static',
+      'skills': 'Web Development, React',
+    },
+    {
+      'name': 'Kat Dunphy',
+      'title': 'React Website Developer',
+      'description':
+          'I need a react developer who can code my static portfolio website',
+      'skills': 'Web Development, React',
+    },
+    {
+      'name': 'Kat Dunphy',
+      'title': 'React Website',
+      'description': 'I need a react developer who can code my static',
+      'skills': 'Web Development, React',
+    },
     {
       'name': 'Kat Dunphy',
       'title': 'React Website Developer',
@@ -63,9 +143,9 @@ class _RecommendedForYouPageState extends State<RecommendedForYouPage> {
                 _buildTopBar(),
                 SizedBox(height: 24.h),
                 _buildGreetingSection(),
-                SizedBox(height: 24.h),
+                SizedBox(height: 12.h),
                 DashboardSearchBar(),
-                SizedBox(height: 24.h),
+                SizedBox(height: 12.h),
                 _buildRecommendedSection(),
               ],
             ),
@@ -96,7 +176,7 @@ class _RecommendedForYouPageState extends State<RecommendedForYouPage> {
         ),
         SizedBox(height: 4),
         Text(
-          "You have new notifications!",
+          "Active Trades, Just for you!",
           style: TextStyle(color: Color(0xFF656678), fontSize: 14),
         ),
       ],
@@ -136,41 +216,43 @@ class _RecommendedForYouPageState extends State<RecommendedForYouPage> {
   }
 
   Widget _buildRecommendedSection() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Recommended for you',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 32.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            Text(
-              'View More >',
-              style: TextStyle(color: const Color(0xff874fff), fontSize: 25.sp),
-            ),
-          ],
-        ),
-        SizedBox(height: 10.h),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
+    return Consumer<TradeProvider>(
+      builder: (context, tp, child) {
+        return Center(
           child: Column(
-            children:
-                _recommendedTrades
-                    .map(
-                      (trade) => Padding(
-                        padding: EdgeInsets.only(right: 20.w),
-                        child: TradeCardRFY(trade: trade),
-                      ),
-                    )
-                    .toList(),
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  children:
+                      tp.tradeList
+                          .map(
+                            (trade) => GestureDetector(
+                              onTap: (){},
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 20.w),
+                                child: TradeCard(
+                                  trade: trade,
+                                  cardType: TradeCardType.recommended,
+                                ),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                  // _recommendedTrades
+                  //     .map(
+                  //       (trade) => Padding(
+                  //         padding: EdgeInsets.only(right: 20.w),
+                  //         child: TradeCardRFY(trade: trade),
+                  //       ),
+                  //     )
+                  //     .toList(),
+                ),
+              ),
+            ],
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 
