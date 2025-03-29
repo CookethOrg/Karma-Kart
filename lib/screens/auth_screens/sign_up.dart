@@ -6,6 +6,7 @@ import 'package:karmakart/models/form_field_data.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
 import 'package:karmakart/screens/auth_screens/skill_selection.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignUp extends StatelessWidget {
   SignUp({super.key});
@@ -42,18 +43,18 @@ class SignUp extends StatelessWidget {
           children: [
             TextSpan(
               text: field.label,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
-                fontSize: 12,
+                fontSize: 30.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),
             if (field.required)
-              const TextSpan(
+              TextSpan(
                 text: '*',
                 style: TextStyle(
                   color: Color(0xFFF24822),
-                  fontSize: 12,
+                  fontSize: 30.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -78,7 +79,7 @@ class SignUp extends StatelessWidget {
               },
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8.h),
           Expanded(
             child: AuthFormField(
               controller: pv.lastNameController,
@@ -130,12 +131,12 @@ class SignUp extends StatelessWidget {
               field.id == 'password' &&
               pv.passwordController.text.length >= 8)
             Padding(
-              padding: const EdgeInsets.only(top: 8, left: 8),
+              padding: EdgeInsets.only(top: 8.h, left: 8.w),
               child: Text(
                 field.hint!,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Color(0xFF656678),
-                  fontSize: 12,
+                  fontSize: 30.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -149,12 +150,12 @@ class SignUp extends StatelessWidget {
         children:
             formFields.map((field) {
               return Padding(
-                padding: const EdgeInsets.only(bottom: 24),
+                padding: EdgeInsets.only(bottom: 15.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     buildFieldLabel(field),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 3.h),
                     if (field.id == 'name')
                       buildNameFields()
                     else
@@ -174,12 +175,12 @@ class SignUp extends StatelessWidget {
               color: const Color(0xFF020315),
               child: Center(
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 428),
+                  constraints: BoxConstraints(maxWidth: 860.w),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 37),
+                        padding: EdgeInsets.symmetric(horizontal: 64.w),
                         child: Form(
                           key: _formKey,
                           child: SingleChildScrollView(
@@ -188,14 +189,14 @@ class SignUp extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 SignupHead(pageIndex: pv.pageIndex),
-                                const SizedBox(height: 40),
+                                SizedBox(height: 20.h),
                                 buildFormFields(),
                               ],
                             ),
                           ),
                         ),
                       ),
-                      SignupBottom(pageIndex: pv.pageIndex, formKey: _formKey,),
+                      SignupBottom(pageIndex: pv.pageIndex, formKey: _formKey),
                     ],
                   ),
                 ),
@@ -222,16 +223,16 @@ class _SignupBottomState extends State<SignupBottom> {
     return Consumer<AuthenticationProvider>(
       builder: (context, pv, child) {
         return Container(
-          height: 97,
+          height: 60.h,
           color: const Color(0xFF020315),
           child: Column(
             children: [
-              Container(height: 1, color: const Color(0xFF101123)),
+              Container(height: 1.h, color: const Color(0xFF101123)),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 36,
-                    vertical: 24,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 35.w,
+                    vertical: 8.h,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -246,7 +247,7 @@ class _SignupBottomState extends State<SignupBottom> {
                           },
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 20.w),
                       Expanded(
                         child: Authbuttons(
                           text: 'Next',
@@ -259,9 +260,7 @@ class _SignupBottomState extends State<SignupBottom> {
                               final result = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder:
-                                      (context) =>
-                                           SkillSelection(),
+                                  builder: (context) => SkillSelection(),
                                 ),
                               );
                               // Update pageIndex based on the result

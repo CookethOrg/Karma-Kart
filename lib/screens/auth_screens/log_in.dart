@@ -8,6 +8,7 @@ import 'package:karmakart/screens/auth_screens/sign_up.dart';
 import 'package:karmakart/screens/auth_screens/skill_selection.dart';
 import 'package:karmakart/screens/dashboard_page.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LogIn extends StatelessWidget {
   LogIn({super.key});
@@ -44,18 +45,18 @@ class LogIn extends StatelessWidget {
           children: [
             TextSpan(
               text: field.label,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
-                fontSize: 12,
+                fontSize: 30.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),
             if (field.required)
-              const TextSpan(
+              TextSpan(
                 text: '*',
                 style: TextStyle(
                   color: Color(0xFFF24822),
-                  fontSize: 12,
+                  fontSize: 30.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -132,12 +133,12 @@ class LogIn extends StatelessWidget {
               field.id == 'password' &&
               pv.passwordController.text.length >= 8)
             Padding(
-              padding: const EdgeInsets.only(top: 8, left: 8),
+              padding: EdgeInsets.only(top: 8.h, left: 8.w),
               child: Text(
                 field.hint!,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Color(0xFF656678),
-                  fontSize: 12,
+                  fontSize: 30.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -151,12 +152,12 @@ class LogIn extends StatelessWidget {
         children:
             formFields.map((field) {
               return Padding(
-                padding: const EdgeInsets.only(bottom: 24),
+                padding: EdgeInsets.only(bottom: 10.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     buildFieldLabel(field),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 5.h),
                     buildInputField(field),
                   ],
                 ),
@@ -173,12 +174,12 @@ class LogIn extends StatelessWidget {
               color: const Color(0xFF020315),
               child: Center(
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 428),
+                  constraints: BoxConstraints(maxWidth: 860.w),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 37),
+                        padding: EdgeInsets.symmetric(horizontal: 50.w),
                         child: Form(
                           key: _formKey,
                           child: SingleChildScrollView(
@@ -191,7 +192,7 @@ class LogIn extends StatelessWidget {
                                   heading: 'Login Account',
                                   isPageIndexVisible: false,
                                 ),
-                                const SizedBox(height: 40),
+                                SizedBox(height: 20.h),
                                 buildFormFields(),
                               ],
                             ),
@@ -225,16 +226,16 @@ class _SignupBottomState extends State<SignupBottom> {
     return Consumer<AuthenticationProvider>(
       builder: (context, pv, child) {
         return Container(
-          height: 97,
+          height: 60.h,
           color: const Color(0xFF020315),
           child: Column(
             children: [
-              Container(height: 1, color: const Color(0xFF101123)),
+              Container(height: 1.h, color: const Color(0xFF101123)),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 36,
-                    vertical: 24,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 30.w,
+                    vertical: 8.h,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -251,7 +252,7 @@ class _SignupBottomState extends State<SignupBottom> {
                           },
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 25.w),
                       Expanded(
                         child: Authbuttons(
                           text: 'Next',

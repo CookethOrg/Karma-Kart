@@ -15,42 +15,42 @@ class VerifyDetails extends StatelessWidget {
     final auth = Provider.of<AuthenticationProvider>(context, listen: false);
     Widget buildHeader() {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: EdgeInsets.symmetric(vertical: 16.h),
         child: Column(
           children: [
             Text(
               'Verify Your Details',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 24,
+                fontSize: 45.sp,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            SizedBox(height: 12),
+            SizedBox(height: 12.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 4,
                 (index) => Container(
-                  width: 50,
-                  height: 4,
-                  margin: EdgeInsets.symmetric(horizontal: 4),
+                  width: 100.w,
+                  height: 3.h,
+                  margin: EdgeInsets.symmetric(horizontal: 4.w),
                   decoration: BoxDecoration(
                     color:
                         index <= auth.pageIndex
                             ? Colors.white
                             : const Color(0xFF0F1120),
-                    borderRadius: BorderRadius.circular(2),
+                    borderRadius: BorderRadius.circular(2.r),
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Text(
               'Page 4 of 4',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 12,
+                fontSize: 25.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -61,12 +61,12 @@ class VerifyDetails extends StatelessWidget {
 
     Widget buildProfilePicture() {
       return CircleAvatar(
-        radius: 50,
+        radius: 100.r,
         backgroundColor: Color(0xFF0F1120),
         backgroundImage: auth.image != null ? FileImage(auth.image!) : null,
         child:
             auth.image == null
-                ? Icon(Icons.person, size: 50, color: Color(0xFF656678))
+                ? Icon(Icons.person, size: 30.h, color: Color(0xFF656678))
                 : null,
       );
     }
@@ -77,17 +77,17 @@ class VerifyDetails extends StatelessWidget {
       String defaultValue,
     ) {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: EdgeInsets.symmetric(vertical: 4.h),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              width: 100,
+              width: 100.w,
               child: Text(
                 label,
                 style: TextStyle(
                   color: Color(0xFF656678),
-                  fontSize: 12,
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -97,7 +97,7 @@ class VerifyDetails extends StatelessWidget {
                 defaultValue,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 14,
+                  fontSize: 27.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -109,17 +109,17 @@ class VerifyDetails extends StatelessWidget {
 
     Widget buildSkillTags() {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: EdgeInsets.symmetric(vertical: 8.h),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              width: 100,
+              width: 150.w,
               child: Text(
                 'Generated skill tags',
                 style: TextStyle(
                   color: Color(0xFF656678),
-                  fontSize: 12,
+                  fontSize: 25.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -132,21 +132,21 @@ class VerifyDetails extends StatelessWidget {
                       _skillTags
                           .map(
                             (tag) => Padding(
-                              padding: const EdgeInsets.only(right: 8),
+                              padding: EdgeInsets.only(right: 4.w),
                               child: Container(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 6,
+                                  horizontal: 6.h,
+                                  vertical: 3.h,
                                 ),
                                 decoration: BoxDecoration(
                                   color: Color(0xFF0F1120),
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(20.r),
                                 ),
                                 child: Text(
                                   tag,
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 12,
+                                    fontSize: 25.sp,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -164,17 +164,17 @@ class VerifyDetails extends StatelessWidget {
 
     Widget buildBioSection() {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: EdgeInsets.symmetric(vertical: 8.h),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              width: 100,
+              width: 100.w,
               child: Text(
                 'Bio',
                 style: TextStyle(
                   color: Color(0xFF656678),
-                  fontSize: 12,
+                  fontSize: 25.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -184,7 +184,7 @@ class VerifyDetails extends StatelessWidget {
                 auth.bioController.text,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 14,
+                  fontSize: 27.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -203,17 +203,17 @@ class VerifyDetails extends StatelessWidget {
       return GestureDetector(
         onTap: onPressed,
         child: Container(
-          height: 48,
+          height: 25.h,
           decoration: BoxDecoration(
             color: backgroundColor,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(8.r),
           ),
           child: Center(
             child: Text(
               text,
               style: TextStyle(
                 color: textColor,
-                fontSize: 14,
+                fontSize: 27.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -226,10 +226,10 @@ class VerifyDetails extends StatelessWidget {
       return Consumer<AuthenticationProvider>(
         builder: (context, auth, child) {
           return Container(
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
             decoration: BoxDecoration(
               border: Border(
-                top: BorderSide(color: Color(0xFF101123), width: 1),
+                top: BorderSide(color: Color(0xFF101123), width: 1.w),
               ),
             ),
             child: Row(
@@ -244,7 +244,7 @@ class VerifyDetails extends StatelessWidget {
                     },
                   ),
                 ),
-                SizedBox(width: 12),
+                SizedBox(width: 12.h),
                 Expanded(
                   child: buildButton(
                     text: 'Done',
@@ -317,7 +317,7 @@ class VerifyDetails extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 37),
+                          padding: EdgeInsets.symmetric(horizontal: 55.w),
                           child: Form(
                             key: _formKey,
                             child: SingleChildScrollView(
@@ -326,9 +326,9 @@ class VerifyDetails extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   buildHeader(),
-                                  SizedBox(height: 20),
+                                  SizedBox(height: 20.h),
                                   buildProfilePicture(),
-                                  SizedBox(height: 24),
+                                  SizedBox(height: 24.h),
                                   buildDetailRow(
                                     'Name',
                                     pv.firstNameController,

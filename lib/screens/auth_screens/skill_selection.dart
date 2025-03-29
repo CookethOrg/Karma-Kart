@@ -3,6 +3,7 @@ import 'package:karmakart/models/form_field_data.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
 import 'package:karmakart/screens/auth_screens/bio_profile.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SkillSelection extends StatelessWidget {
   // final int pageIndex;
@@ -30,17 +31,17 @@ class SkillSelection extends StatelessWidget {
     Widget buildHeader() {
       return Column(
         children: [
-          const Text(
+          Text(
             'Skill Selection', // Fixed typo
             style: TextStyle(
               color: Colors.white,
-              fontSize: 24,
+              fontSize: 50.sp,
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 27),
+          SizedBox(height: 15.h),
           SizedBox(
-            width: 164,
+            width: 364.w,
             child: Column(
               children: [
                 Row(
@@ -48,25 +49,25 @@ class SkillSelection extends StatelessWidget {
                     4,
                     (index) => Expanded(
                       child: Container(
-                        height: 8,
-                        margin: const EdgeInsets.symmetric(horizontal: 1),
+                        height: 8.h,
+                        margin: EdgeInsets.symmetric(horizontal: 1.w),
                         decoration: BoxDecoration(
                           color:
                               index <= auth.pageIndex
                                   ? Colors.white
                                   : const Color(0xFF0F1120),
-                          borderRadius: BorderRadius.circular(19),
+                          borderRadius: BorderRadius.circular(19.r),
                         ),
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 11),
+                SizedBox(height: 10.h),
                 Text(
                   'Page ${auth.pageIndex + 1} of 4',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
-                    fontSize: 12,
+                    fontSize: 25.sp,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -86,17 +87,17 @@ class SkillSelection extends StatelessWidget {
       return GestureDetector(
         onTap: onPressed,
         child: Container(
-          height: 48,
+          height: 48.h,
           decoration: BoxDecoration(
             color: backgroundColor,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(8.r),
           ),
           child: Center(
             child: Text(
               text,
               style: TextStyle(
                 color: textColor,
-                fontSize: 12,
+                fontSize: 27.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -111,18 +112,18 @@ class SkillSelection extends StatelessWidget {
           children: [
             TextSpan(
               text: field.label,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
-                fontSize: 12,
+                fontSize: 27.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),
             if (field.required)
-              const TextSpan(
+              TextSpan(
                 text: '*',
                 style: TextStyle(
                   color: Color(0xFFF24822),
-                  fontSize: 12,
+                  fontSize: 27.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -140,36 +141,33 @@ class SkillSelection extends StatelessWidget {
       return TextFormField(
         controller: controller,
         obscureText: isPassword,
-        style: const TextStyle(
+        style: TextStyle(
           color: Colors.white,
-          fontSize: 12,
+          fontSize: 27.sp,
           fontWeight: FontWeight.w500,
         ),
         decoration: InputDecoration(
           hintText: placeholder,
-          hintStyle: const TextStyle(
+          hintStyle: TextStyle(
             color: Color(0xFF656678),
-            fontSize: 12,
+            fontSize: 27.sp,
             fontWeight: FontWeight.w500,
           ),
           filled: true,
           fillColor: const Color(0xFF0F1120),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 12,
-          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(8.r),
             borderSide: BorderSide.none,
           ),
-          errorStyle: const TextStyle(color: Color(0xFFF24822), fontSize: 10),
+          errorStyle: TextStyle(color: Color(0xFFF24822), fontSize: 20.sp),
           errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Color(0xFFF24822), width: 1),
+            borderRadius: BorderRadius.circular(8.r),
+            borderSide: BorderSide(color: Color(0xFFF24822), width: 1.w),
           ),
           focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Color(0xFFF24822), width: 1),
+            borderRadius: BorderRadius.circular(8.r),
+            borderSide: BorderSide(color: Color(0xFFF24822), width: 1.w),
           ),
         ),
         validator: validator,
@@ -182,12 +180,12 @@ class SkillSelection extends StatelessWidget {
         children: [
           // Skills field
           Padding(
-            padding: const EdgeInsets.only(bottom: 24),
+            padding: EdgeInsets.only(bottom: 16.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 buildFieldLabel(formFields[0]),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 buildTextField(
                   controller: auth.skillsController,
                   placeholder: formFields[0].placeholder ?? '',
@@ -204,22 +202,22 @@ class SkillSelection extends StatelessWidget {
           ),
           // Links section
           Padding(
-            padding: const EdgeInsets.only(bottom: 24),
+            padding: EdgeInsets.only(bottom: 15.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 buildFieldLabel(formFields[1]),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 buildTextField(
                   controller: auth.link1Controller,
                   placeholder: formFields[1].placeholder ?? '',
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 buildTextField(
                   controller: auth.link2Controller,
                   placeholder: formFields[1].placeholder ?? '',
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 buildTextField(
                   controller: auth.link3Controller,
                   placeholder: formFields[1].placeholder ?? '',
@@ -233,17 +231,14 @@ class SkillSelection extends StatelessWidget {
 
     Widget buildBottomSection() {
       return Container(
-        height: 97, // Fixed height
+        height: 45.h, // Fixed height
         color: const Color(0xFF020315),
         child: Column(
           children: [
-            Container(height: 1, color: const Color(0xFF101123)),
+            Container(height: 1.h, color: const Color(0xFF101123)),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 36,
-                  vertical: 24,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 10.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -258,7 +253,7 @@ class SkillSelection extends StatelessWidget {
                         },
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12.h),
                     Expanded(
                       child: buildButton(
                         text: 'Next',
@@ -294,12 +289,12 @@ class SkillSelection extends StatelessWidget {
               color: const Color(0xFF020315),
               child: Center(
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 428),
+                  constraints: BoxConstraints(maxWidth: 828.w),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 37),
+                        padding: EdgeInsets.symmetric(horizontal: 50.w),
                         child: Form(
                           key: _formKey,
                           child: SingleChildScrollView(
@@ -308,7 +303,7 @@ class SkillSelection extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 buildHeader(),
-                                const SizedBox(height: 40),
+                                SizedBox(height: 20.h),
                                 buildFormFields(),
                               ],
                             ),
