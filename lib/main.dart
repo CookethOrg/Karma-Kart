@@ -3,7 +3,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:karmakart/core/services/supabase_service.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
+import 'package:karmakart/providers/trade_provider.dart';
 import 'package:karmakart/screens/auth_screens/log_in.dart';
+import 'package:karmakart/screens/dashboard_page.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'screens/auth_screens/sign_up.dart';
@@ -32,6 +34,15 @@ void main() async {
               (context, supabaseService, previousAuth) =>
                   previousAuth ?? AuthenticationProvider(supabaseService),
         ),
+        ChangeNotifierProxyProvider<SupabaseService, TradeProvider>(
+          create:
+              (context) => TradeProvider(
+                Provider.of<SupabaseService>(context, listen: false),
+              ),
+          update:
+              (context, supabaseService, previousTrade) =>
+                  previousTrade ?? TradeProvider(supabaseService),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -51,7 +62,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(fontFamily: 'Inter'),
         debugShowCheckedModeBanner: false,
         // home: LogIn(),
-        home: SignUp(),
+        home: DashboardPage(),
       ),
     );
   }
