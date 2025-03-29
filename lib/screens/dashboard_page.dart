@@ -3,6 +3,7 @@ import 'package:karmakart/core/widgets/dashboard_search_bar.dart';
 import 'package:karmakart/core/widgets/drawers/dashboard_drawer.dart';
 import 'package:karmakart/core/widgets/trade_card.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
+import 'package:karmakart/screens/create_trade.dart';
 import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -184,17 +185,18 @@ class _DashboardPageState extends State<DashboardPage> {
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            children: _recommendedTrades
-                .map(
-                  (trade) => Padding(
-                    padding: const EdgeInsets.only(right: 16),
-                    child: TradeCard(
-                      trade: trade,
-                      cardType: TradeCardType.recommended,
-                    ),
-                  ),
-                )
-                .toList(),
+            children:
+                _recommendedTrades
+                    .map(
+                      (trade) => Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: TradeCard(
+                          trade: trade,
+                          cardType: TradeCardType.recommended,
+                        ),
+                      ),
+                    )
+                    .toList(),
           ),
         ),
       ],
@@ -225,17 +227,18 @@ class _DashboardPageState extends State<DashboardPage> {
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            children: _activeTrades
-                .map(
-                  (trade) => Padding(
-                    padding: const EdgeInsets.only(right: 16),
-                    child: TradeCard(
-                      trade: trade,
-                      cardType: TradeCardType.active,
-                    ),
-                  ),
-                )
-                .toList(),
+            children:
+                _activeTrades
+                    .map(
+                      (trade) => Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: TradeCard(
+                          trade: trade,
+                          cardType: TradeCardType.active,
+                        ),
+                      ),
+                    )
+                    .toList(),
           ),
         ),
       ],
@@ -289,7 +292,9 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget _centerActionButton() {
     return GestureDetector(
       onTap: () {
-        // Perform some action when the center button is clicked
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (context) => TradeCreationPage()));
         print("Center button tapped!");
       },
       child: Container(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:karmakart/core/services/image_services.dart';
 import 'package:karmakart/core/services/supabase_service.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
 import 'package:karmakart/providers/trade_provider.dart';
@@ -48,6 +49,7 @@ void main() async {
         ChangeNotifierProvider<TransactionProvider>(
           create: (_) => TransactionProvider(),
         ),
+        ChangeNotifierProvider<ImageServices>(create: (_) => ImageServices(instance.client))
       ],
       child: const MyApp(),
     ),
@@ -67,7 +69,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(fontFamily: 'Inter'),
         debugShowCheckedModeBanner: false,
         // home: LogIn(),
-        home: DashboardPage(),
+        home: SignUp(),
       ),
     );
   }
