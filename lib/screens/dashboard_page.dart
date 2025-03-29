@@ -18,30 +18,6 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  final List<Map<String, String>> _recommendedTrades = [
-    {
-      'name': 'Kat Dunphy',
-      'title': 'React Website Developer',
-      'description':
-          'I need a react developer who can code my static portfolio website',
-      'skills': 'Web Development, React',
-    },
-    {
-      'name': 'Kat Dunphy',
-      'title': 'React Website',
-      'description': 'I need a react developer who can code my static',
-      'skills': 'Web Development, React',
-    },
-  ];
-
-  final List<Map<String, String>> _activeTrades = [
-    {
-      'title': 'React Website Developer',
-      'points': '200 Karma points',
-      'status': 'Ongoing',
-    },
-    {'title': 'React Websi', 'points': '200 Karma points', 'status': 'Ongoing'},
-  ];
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;

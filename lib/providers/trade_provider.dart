@@ -105,6 +105,33 @@ class TradeProvider extends StateHandler {
     }
   }
 
+  void updateTradeLists() async {
+    var res = supabaseClient.auth.currentUser;
+    var response = await supabaseClient
+        .from('Trade')
+        .select()
+        .eq('isLive', true);
+    var ures = await supabaseClient
+        .from('Trade')
+        .select()
+        .eq('clientUserId', res!.id);
+    List<Map<String, dynamic>> dbTradeList = response;
+    List<Map<String, dynamic>> dbPostedTradeList = ures;
+    print('Cast response to list');
+    _tradeList.clear();
+    _postedTrades.clear();
+    for (var trade in dbTradeList) {
+      _tradeList.add(Trade.fromJson(trade));
+      print('Added trade: ${trade['tradeId']}');
+    }
+
+    for (var trade in dbPostedTradeList) {
+      _postedTrades.add(Trade.fromJson(trade));
+    }
+    print('tradelist : $_tradeList');
+    notifyListeners();
+  }
+
   // Add a tag
   void addTag(String tag) {
     if (!_selectedTags.contains(tag) && _selectedTags.length < 5) {
@@ -191,6 +218,7 @@ class TradeProvider extends StateHandler {
         // 'urgency': newTrade.urgency,
         'isFav': newTrade.isFav,
       });
+      updateTradeLists();
       res = 'Trade Posted';
     } catch (e) {
       return e.toString();

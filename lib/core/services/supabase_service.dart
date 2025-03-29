@@ -20,26 +20,26 @@ class SupabaseService extends StateHandler {
     notifyListeners();
   }
 
-  // Future<Map<String, dynamic>?> fetchCurrentUserName() async {
-  //   final user = supabase.auth.currentUser;
-  //   if (user == null) {
-  //     return null;
-  //   }
+  Future<Map<String, dynamic>?> fetchCurrentUserName() async {
+    final user = supabase.auth.currentUser;
+    if (user == null) {
+      return null;
+    }
 
-  //   try {
-  //     final response = await supabase
-  //         .from('User')
-  //         .select('userName')
-  //         .eq('id', user.id)
-  //         .single();
+    try {
+      final response = await supabase
+          .from('User')
+          .select('name')
+          .eq('id', user.id)
+          .single();
 
-  //     print("Fetched user name: $response");
-  //     return response;
-  //   } catch (e) {
-  //     print("Error fetching user name: $e");
-  //     return null;
-  //   }
-  // }
+      print("Fetched user name: $response");
+      return response;
+    } catch (e) {
+      print("Error fetching user name: $e");
+      return null;
+    }
+  }
 
   // Future<Map<String, dynamic>?> fetchCurrentUserDetails() async {
   //   final user = supabase.auth.currentUser;
