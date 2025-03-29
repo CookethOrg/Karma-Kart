@@ -7,6 +7,7 @@ import 'package:karmakart/providers/authentication_provider.dart';
 import 'package:karmakart/providers/trade_provider.dart';
 import 'package:karmakart/screens/create_trade.dart';
 import 'package:provider/provider.dart';
+import 'recommended_for_you_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
