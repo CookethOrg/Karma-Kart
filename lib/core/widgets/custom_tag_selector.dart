@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:radix_icons/radix_icons.dart';
-import '../../providers/trade_provider.dart'; // Changed import to TradeProvider
+import '../../providers/trade_provider.dart';
 
 class CustomTagSelector extends StatefulWidget {
-  const CustomTagSelector({Key? key}) : super(key: key);
+  final List<String>? initialTags; // Optional initial tags
+  // final Function(List<String>)? onTagsChanged; // Callback when tags change
+
+  const CustomTagSelector({
+    super.key,
+    this.initialTags,
+    // this.onTagsChanged,
+  });
 
   @override
-  _CustomTagSelectorState createState() => _CustomTagSelectorState();
+  State<CustomTagSelector> createState() => _CustomTagSelectorState();
 }
 
 class _CustomTagSelectorState extends State<CustomTagSelector> {
@@ -17,17 +24,32 @@ class _CustomTagSelectorState extends State<CustomTagSelector> {
   OverlayEntry? _overlayEntry;
   final LayerLink _layerLink = LayerLink();
   bool _isSearching = false;
+  double _overlayOffset = 0;
+  bool _showAbove = false;
 
   @override
   void initState() {
     super.initState();
     _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
-        _showOverlay();
+        // Add a small delay to ensure keyboard is fully shown before showing overlay
+        Future.delayed(const Duration(milliseconds: 100), () {
+          _showOverlay();
+        });
       } else {
         _hideOverlay();
       }
     });
+
+    // Initialize with any provided tags
+    if (widget.initialTags != null && widget.initialTags!.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final provider = Provider.of<TradeProvider>(context, listen: false);
+        for (final tag in widget.initialTags!) {
+          provider.addTag(tag);
+        }
+      });
+    }
   }
 
   @override
@@ -41,7 +63,33 @@ class _CustomTagSelectorState extends State<CustomTagSelector> {
   void _showOverlay() {
     final RenderBox renderBox = context.findRenderObject() as RenderBox;
     final size = renderBox.size;
-    final offset = renderBox.localToGlobal(Offset.zero);
+
+    // Calculate visible area considering keyboard
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final position = renderBox.localToGlobal(Offset.zero);
+
+    // Available space below the input field
+    final availableSpaceBelow =
+        screenHeight - position.dy - size.height - keyboardHeight;
+    // Available space above the input field
+    final availableSpaceAbove = position.dy;
+
+    // Desired dropdown height
+    final dropdownHeight = 200.h;
+
+    // Determine whether to show above or below
+    _showAbove =
+        availableSpaceBelow < dropdownHeight &&
+        availableSpaceAbove > availableSpaceBelow;
+
+    if (_showAbove) {
+      // Position above with proper offset (negative to go up)
+      _overlayOffset = -dropdownHeight;
+    } else {
+      // Position below with small gap
+      _overlayOffset = size.height + 1.h;
+    }
 
     _overlayEntry = OverlayEntry(
       builder:
@@ -50,7 +98,7 @@ class _CustomTagSelectorState extends State<CustomTagSelector> {
             child: CompositedTransformFollower(
               link: _layerLink,
               showWhenUnlinked: false,
-              offset: Offset(0, size.height + 1.h),
+              offset: Offset(0, _overlayOffset),
               child: Material(
                 elevation: 4,
                 borderRadius: BorderRadius.circular(12.r),
@@ -58,10 +106,9 @@ class _CustomTagSelectorState extends State<CustomTagSelector> {
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
                     maxHeight:
-                        MediaQuery.of(context).size.height -
-                        offset.dy -
-                        size.height -
-                        16.h,
+                        _showAbove
+                            ? min(dropdownHeight, availableSpaceAbove - 16.h)
+                            : min(dropdownHeight, availableSpaceBelow - 16.h),
                     maxWidth: size.width,
                   ),
                   child: _buildSearchDropdown(),
@@ -74,6 +121,9 @@ class _CustomTagSelectorState extends State<CustomTagSelector> {
     Overlay.of(context).insert(_overlayEntry!);
     setState(() => _isSearching = true);
   }
+
+  // Helper function to get the minimum of two numbers
+  double min(double a, double b) => a < b ? a : b;
 
   void _hideOverlay() {
     _overlayEntry?.remove();
@@ -120,6 +170,10 @@ class _CustomTagSelectorState extends State<CustomTagSelector> {
                 ),
                 onTap: () {
                   tradeProvider.addTag(tag);
+
+                  // Call the callback with updated tags
+                  tradeProvider.onChangeTags(tradeProvider.selectedTags);
+
                   _searchController.clear();
                   _focusNode.unfocus();
                 },
@@ -235,7 +289,10 @@ class _CustomTagSelectorState extends State<CustomTagSelector> {
           Text(tag, style: TextStyle(color: Colors.white, fontSize: 20.sp)),
           SizedBox(width: 8.w),
           GestureDetector(
-            onTap: () => tradeProvider.removeTag(tag),
+            onTap: () {
+              tradeProvider.removeTag(tag);
+              tradeProvider.onChangeTags(tradeProvider.selectedTags);
+            },
             child: Icon(
               RadixIcons.Cross_1,
               size: 18.sp,
