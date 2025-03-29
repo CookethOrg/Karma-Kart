@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:karmakart/core/widgets/dashboard_search_bar.dart';
 import 'package:karmakart/core/widgets/drawers/dashboard_drawer.dart';
 import 'package:karmakart/core/widgets/trade_card.dart';
+import 'package:karmakart/models/trade.dart';
 import 'package:karmakart/providers/trade_provider.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
 import 'package:karmakart/screens/create_trade.dart';
 import 'package:karmakart/screens/dashboard_page.dart';
+import 'package:karmakart/screens/trade_details_page.dart';
 import 'package:provider/provider.dart';
 import 'package:radix_icons/radix_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,39 +22,6 @@ class _AllTradesPageState extends State<AllTradesPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
   int _selectedTabIndex = 0; // To track which tab is selected
-
-  // Sample data for "Your trades" tab
-  final List<Map<String, String>> _yourTrades = [
-    {
-      'title': 'React Website Developer',
-      'points': '200 karma points',
-      'status': 'Ongoing',
-    },
-    {
-      'title': 'UI/UX Designer Needed',
-      'points': '150 karma points',
-      'status': 'Ongoing',
-    },
-    {
-      'title': 'Flutter App Development',
-      'points': '300 karma points',
-      'status': 'Ongoing',
-    },
-  ];
-
-  // Sample data for "Posted by you" tab
-  final List<Map<String, String>> _postedByYou = [
-    {
-      'title': 'Node.js Backend Developer',
-      'points': '250 karma points',
-      'status': 'Ongoing',
-    },
-    {
-      'title': 'Python Data Analysis',
-      'points': '180 karma points',
-      'status': 'Ongoing',
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +38,7 @@ class _AllTradesPageState extends State<AllTradesPage> {
               children: [
                 SizedBox(height: 20),
                 _buildTopBar(),
-                SizedBox(height: 24.h),
+                SizedBox(height: 15.h),
                 _buildHeader(),
                 SizedBox(height: 12.h),
                 _buildSearchBar(),
@@ -176,59 +145,62 @@ class _AllTradesPageState extends State<AllTradesPage> {
     );
   }
 
-  Widget _buildTradeCard(Map<String, String> trade) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: Color(0xFF0F1120),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.amber.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(4),
+  Widget _buildTradeCard(Trade trade) {
+    return GestureDetector(
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => TradeDetailsPage(trade: trade),)),
+      child: Container(
+        margin: EdgeInsets.only(bottom: 16),
+        decoration: BoxDecoration(
+          color: Color(0xFF0F1120),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.amber.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.circle, color: Colors.amber, size: 8),
+                        SizedBox(width: 4),
+                        Text(
+                          trade.tradeProgress.toString(),
+                          style: TextStyle(color: Colors.amber, fontSize: 12),
+                        ),
+                      ],
+                    ),
                   ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.circle, color: Colors.amber, size: 8),
-                      SizedBox(width: 4),
-                      Text(
-                        trade['status'] ?? "Ongoing",
-                        style: TextStyle(color: Colors.amber, fontSize: 12),
-                      ),
-                    ],
+                  Spacer(),
+                  Icon(
+                    Icons.chat_bubble_outline,
+                    color: Colors.white.withOpacity(0.5),
                   ),
-                ),
-                Spacer(),
-                Icon(
-                  Icons.chat_bubble_outline,
-                  color: Colors.white.withOpacity(0.5),
-                ),
-              ],
-            ),
-            SizedBox(height: 12),
-            Text(
-              trade['title'] ?? "Trade Title",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
+                ],
               ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              trade['points'] ?? "Karma points",
-              style: TextStyle(color: Color(0xFF656678), fontSize: 14),
-            ),
-          ],
+              SizedBox(height: 12),
+              Text(
+                trade.heading,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                trade.price.toString(),
+                style: TextStyle(color: Color(0xFF656678), fontSize: 14),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -236,7 +208,9 @@ class _AllTradesPageState extends State<AllTradesPage> {
 
   Widget _buildTradesList() {
     // Choose which data to display based on selected tab
-    final dataToDisplay = _selectedTabIndex == 0 ? _yourTrades : _postedByYou;
+    final TradeProvider tp = Provider.of<TradeProvider>(context, listen: false);
+    final dataToDisplay =
+        _selectedTabIndex == 0 ? tp.yourTrades : tp.postedTrades;
 
     if (dataToDisplay.isEmpty) {
       return Center(

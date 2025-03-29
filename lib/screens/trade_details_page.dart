@@ -13,7 +13,8 @@ import 'recommended_for_you_page.dart';
 
 class TradeDetailsPage extends StatefulWidget {
   Trade trade;
-  TradeDetailsPage({super.key, required this.trade});
+  bool isNormal;
+  TradeDetailsPage({super.key, required this.trade, this.isNormal = false});
 
   @override
   State<TradeDetailsPage> createState() => _TradeDetailsPageState();
@@ -176,7 +177,7 @@ class _TradeDetailsPageState extends State<TradeDetailsPage> {
   }
 
   Widget _buildRequestButton() {
-    return Center(
+    return !widget.isNormal ? Center(
       child: Container(
         width: 300.w,
         height: 20.h,
@@ -195,6 +196,6 @@ class _TradeDetailsPageState extends State<TradeDetailsPage> {
           ),
         ),
       ),
-    );
+    ) : SizedBox();
   }
 }

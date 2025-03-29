@@ -6,6 +6,7 @@ import 'package:karmakart/core/widgets/trade_card.dart';
 import 'package:karmakart/models/trade.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
 import 'package:karmakart/providers/trade_provider.dart';
+import 'package:karmakart/screens/all_trades_page.dart';
 import 'package:karmakart/screens/create_trade.dart';
 import 'package:karmakart/screens/trade_details_page.dart';
 import 'package:provider/provider.dart';
@@ -19,14 +20,13 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<TradeProvider,SupabaseService>(
-      builder: (context, tp,sp, child) {
+    return Consumer2<TradeProvider, SupabaseService>(
+      builder: (context, tp, sp, child) {
         return Scaffold(
           key: _scaffoldKey,
           backgroundColor: Color(0xFF020315),
@@ -39,13 +39,13 @@ class _DashboardPageState extends State<DashboardPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: FutureBuilder(
                   future: sp.fetchCurrentUserName(),
-                  builder: (context,snapshot) {
+                  builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                return SizedBox();
-              } else if (snapshot.hasError) {
-                return Center(child: Text("Error: ${snapshot.error}"));
-              }
-              var user = snapshot.data;
+                      return SizedBox();
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text("Error: ${snapshot.error}"));
+                    }
+                    var user = snapshot.data;
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -60,7 +60,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         _buildTradesSection(),
                       ],
                     );
-                  }
+                  },
                 ),
               ),
             ),
@@ -241,11 +241,16 @@ class _DashboardPageState extends State<DashboardPage> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Text(
-                  'View More >',
-                  style: TextStyle(
-                    color: const Color(0xff874fff),
-                    fontSize: 12,
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => AllTradesPage(),));
+                  },
+                  child: Text(
+                    'View More >',
+                    style: TextStyle(
+                      color: const Color(0xff874fff),
+                      fontSize: 12,
+                    ),
                   ),
                 ),
               ],

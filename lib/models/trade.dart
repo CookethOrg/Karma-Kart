@@ -9,8 +9,9 @@ class Trade {
   double price;
   String expectedDeliveryTime;
   int hoursPerDay;
-  // Urgency urgency;
   bool isFav;
+  TradeProgress tradeProgress;
+  String approachee;
   bool isLive;
 
   Trade({
@@ -20,9 +21,10 @@ class Trade {
     required this.description,
     required this.price,
     required this.expectedDeliveryTime,
+    required this.approachee,
     this.hoursPerDay = 4,
     required this.tags,
-    // this.urgency = Urgency.medium,
+    required this.tradeProgress,
     this.isFav = false,
     this.isLive = true,
   });
@@ -37,7 +39,8 @@ class Trade {
       "price": price,
       "expectedDeliveryTime": expectedDeliveryTime,
       "hoursPerDay": hoursPerDay,
-      // "urgency": urgency,
+      'approachee': approachee,
+      'tradeProgress': tradeProgress.toString().split('.').last, // e.g., "live"
       "isFav": isFav,
       'isLive': isLive,
     };
@@ -49,20 +52,20 @@ class Trade {
       heading: json["heading"],
       clientUserId: json["clientUserId"],
       description: json["description"],
-      // Convert price to double
-      price:
-          json["price"] is int
-              ? (json["price"] as int).toDouble()
-              : json["price"],
-      // Convert tags to List<String>
+      // Parse tradeProgress from string to enum
+      tradeProgress: TradeProgress.values.firstWhere(
+        (e) => e.toString().split('.').last == json['tradeProgress'],
+        orElse: () => TradeProgress.live, // Default value if no match
+      ),
+      approachee: json['approachee'] == null ? '' : json['approachee'].toString(),
+      price: json["price"] is int
+          ? (json["price"] as int).toDouble()
+          : json["price"],
       tags: (json["tags"] as List).map((item) => item.toString()).toList(),
       expectedDeliveryTime: json["expectedDeliveryTime"],
-      // Ensure hoursPerDay is an int
-      hoursPerDay:
-          json["hoursPerDay"] is int
-              ? json["hoursPerDay"]
-              : int.parse(json["hoursPerDay"].toString()),
-      // Ensure boolean fields
+      hoursPerDay: json["hoursPerDay"] is int
+          ? json["hoursPerDay"]
+          : int.parse(json["hoursPerDay"].toString()),
       isFav: json["isFav"] is bool ? json["isFav"] : json["isFav"] == true,
       isLive: json["isLive"] is bool ? json["isLive"] : json["isLive"] == true,
     );
