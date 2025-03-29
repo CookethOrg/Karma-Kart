@@ -78,6 +78,7 @@ class AuthenticationProvider extends StateHandler {
     required String name,
     required List<String> socialLinks,
     required String bio,
+    required File imageFile,
   }) async {
     String res = "Some error occurred";
 
@@ -89,6 +90,7 @@ class AuthenticationProvider extends StateHandler {
           socialLinks.isNotEmpty &&
           bio.isNotEmpty) {
         res = await supabaseService.createNewUser(
+          imageFile: imageFile,
           userName: userName,
           email: email,
           password: password,

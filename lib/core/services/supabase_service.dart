@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:karmakart/core/services/image_services.dart';
 import 'package:karmakart/core/utils/utils.dart';
 import 'package:karmakart/models/user.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -65,6 +68,7 @@ class SupabaseService extends StateHandler {
     // skills bhi daalne hoge
     required List<String> socialLinks,
     required String bio,
+    required File imageFile,
   }) async {
     String res = "Some error occurred";
 
@@ -97,9 +101,9 @@ class SupabaseService extends StateHandler {
         );
 
         Map<String, String> links = {
-          "1" : socialLinks[0],
+          "1": socialLinks[0],
           "2": socialLinks[1],
-          "3" : socialLinks[2]
+          "3": socialLinks[2],
         };
 
         // insert data into user table
@@ -117,6 +121,8 @@ class SupabaseService extends StateHandler {
           'projects': {},
           'balance': newUser.balance,
         });
+
+        ImageServices(supabase).uploadImage(imageFile, user.id, true);
 
         res = "Signed Up Successfully";
       }
