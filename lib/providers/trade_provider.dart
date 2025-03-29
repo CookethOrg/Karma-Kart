@@ -20,6 +20,10 @@ class TradeProvider extends StateHandler {
     'Backend',
     'Frontend',
     'Mobile',
+    'Python',
+    'Writing',
+    'VideoGraphy',
+    'Cameraman'
   ];
   final List<String> _selectedTags = [];
   List<String> _myTags = [];

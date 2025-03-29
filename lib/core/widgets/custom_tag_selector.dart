@@ -25,6 +25,7 @@ class _CustomTagSelectorState extends State<CustomTagSelector> {
   final LayerLink _layerLink = LayerLink();
   bool _isSearching = false;
   double _overlayOffset = 0;
+  bool _showAbove = false;
 
   @override
   void initState() {
@@ -66,17 +67,27 @@ class _CustomTagSelectorState extends State<CustomTagSelector> {
     // Calculate visible area considering keyboard
     final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     final screenHeight = MediaQuery.of(context).size.height;
-    final offset = renderBox.localToGlobal(Offset.zero);
+    final position = renderBox.localToGlobal(Offset.zero);
 
-    // Make sure dropdown won't be covered by keyboard
-    final availableHeight =
-        screenHeight - keyboardHeight - offset.dy - size.height;
+    // Available space below the input field
+    final availableSpaceBelow =
+        screenHeight - position.dy - size.height - keyboardHeight;
+    // Available space above the input field
+    final availableSpaceAbove = position.dy;
 
-    // Adjust the position to be above the field if there's not enough space below
-    if (availableHeight < 200.h) {
-      // Min height for dropdown
-      _overlayOffset = -(200.h + size.height);
+    // Desired dropdown height
+    final dropdownHeight = 200.h;
+
+    // Determine whether to show above or below
+    _showAbove =
+        availableSpaceBelow < dropdownHeight &&
+        availableSpaceAbove > availableSpaceBelow;
+
+    if (_showAbove) {
+      // Position above with proper offset (negative to go up)
+      _overlayOffset = -dropdownHeight;
     } else {
+      // Position below with small gap
       _overlayOffset = size.height + 1.h;
     }
 
@@ -95,9 +106,9 @@ class _CustomTagSelectorState extends State<CustomTagSelector> {
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
                     maxHeight:
-                        _overlayOffset > 0
-                            ? availableHeight - 16.h
-                            : 200.h, // Fixed height if showing above
+                        _showAbove
+                            ? min(dropdownHeight, availableSpaceAbove - 16.h)
+                            : min(dropdownHeight, availableSpaceBelow - 16.h),
                     maxWidth: size.width,
                   ),
                   child: _buildSearchDropdown(),
@@ -110,6 +121,9 @@ class _CustomTagSelectorState extends State<CustomTagSelector> {
     Overlay.of(context).insert(_overlayEntry!);
     setState(() => _isSearching = true);
   }
+
+  // Helper function to get the minimum of two numbers
+  double min(double a, double b) => a < b ? a : b;
 
   void _hideOverlay() {
     _overlayEntry?.remove();
@@ -158,10 +172,7 @@ class _CustomTagSelectorState extends State<CustomTagSelector> {
                   tradeProvider.addTag(tag);
 
                   // Call the callback with updated tags
-                  // if (widget.onTagsChanged != null) {
-                  //   // widget.onTagsChanged!([...tradeProvider.selectedTags]);
                   tradeProvider.onChangeTags(tradeProvider.selectedTags);
-                  // }
 
                   _searchController.clear();
                   _focusNode.unfocus();
@@ -280,11 +291,6 @@ class _CustomTagSelectorState extends State<CustomTagSelector> {
           GestureDetector(
             onTap: () {
               tradeProvider.removeTag(tag);
-
-              // Call the callback with updated tags
-              // if (widget.onTagsChanged != null) {
-              //   widget.onTagsChanged!([...tradeProvider.selectedTags]);
-              // }
               tradeProvider.onChangeTags(tradeProvider.selectedTags);
             },
             child: Icon(
