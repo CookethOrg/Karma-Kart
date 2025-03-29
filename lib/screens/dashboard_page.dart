@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:karmakart/core/services/supabase_service.dart';
 import 'package:karmakart/core/widgets/dashboard_search_bar.dart';
 import 'package:karmakart/core/widgets/drawers/dashboard_drawer.dart';
 import 'package:karmakart/core/widgets/trade_card.dart';
@@ -24,8 +25,8 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<TradeProvider>(
-      builder: (context, tp, child) {
+    return Consumer2<TradeProvider,SupabaseService>(
+      builder: (context, tp,sp, child) {
         return Scaffold(
           key: _scaffoldKey,
           backgroundColor: Color(0xFF020315),
@@ -36,19 +37,30 @@ class _DashboardPageState extends State<DashboardPage> {
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildTopBar(),
-                    SizedBox(height: 24),
-                    _buildGreetingSection("Daniel"),
-                    SizedBox(height: 24),
-                    DashboardSearchBar(),
-                    SizedBox(height: 24),
-                    _buildRecommendedSection(),
-                    SizedBox(height: 24),
-                    _buildTradesSection(),
-                  ],
+                child: FutureBuilder(
+                  future: sp.fetchCurrentUserName(),
+                  builder: (context,snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                return SizedBox();
+              } else if (snapshot.hasError) {
+                return Center(child: Text("Error: ${snapshot.error}"));
+              }
+              var user = snapshot.data;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildTopBar(),
+                        SizedBox(height: 24),
+                        _buildGreetingSection(user?['name']),
+                        SizedBox(height: 24),
+                        DashboardSearchBar(),
+                        SizedBox(height: 24),
+                        _buildRecommendedSection(),
+                        SizedBox(height: 24),
+                        _buildTradesSection(),
+                      ],
+                    );
+                  }
                 ),
               ),
             ),
@@ -85,11 +97,11 @@ class _DashboardPageState extends State<DashboardPage> {
             ],
           ),
         ),
-        SizedBox(height: 4),
-        Text(
-          "You have new notifications!",
-          style: TextStyle(color: Color(0xFF656678), fontSize: 14),
-        ),
+        // SizedBox(height: 4),
+        // Text(
+        //   "You have new notifications!",
+        //   style: TextStyle(color: Color(0xFF656678), fontSize: 14),
+        // ),
       ],
     );
   }

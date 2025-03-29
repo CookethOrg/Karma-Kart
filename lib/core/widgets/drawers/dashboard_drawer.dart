@@ -27,40 +27,51 @@ class DashboardDrawer extends StatelessWidget {
             // Ensures proper scrolling
             padding: EdgeInsets.zero,
             children: [
-              UserAccountsDrawerHeader(
-                decoration: BoxDecoration(color: Color(0xFF0F1120)),
-                accountName: Text(
-                  auth.firstNameController.text,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                accountEmail: Text(
-                  auth.emailController.text,
-                  style: TextStyle(color: Colors.grey, fontSize: 14),
-                ),
-                currentAccountPicture: CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Color(0xFF0F1120),
-                  backgroundImage:
-                      auth.image != null ? FileImage(auth.image!) : null,
-                  child:
-                      auth.image == null
-                          ? Icon(
-                            Icons.person,
-                            size: 50,
-                            color: Color(0xFF656678),
-                          )
-                          : null,
-                ),
-                otherAccountsPictures: [
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Icon(Icons.close, color: Colors.white),
-                  ),
-                ],
+              FutureBuilder(
+                future: supa.fetchCurrentUserDetails(),
+                builder: (context,snapshot) {
+                   if (snapshot.connectionState == ConnectionState.waiting) {
+                return SizedBox();
+              } else if (snapshot.hasError) {
+                return Center(child: Text("Error: ${snapshot.error}"));
+              }
+              var user = snapshot.data;
+                  return UserAccountsDrawerHeader(
+                    decoration: BoxDecoration(color: Color(0xFF0F1120)),
+                    accountName: Text(
+                      user?['name'],
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    accountEmail: Text(
+                      user?['email'],
+                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                    ),
+                    currentAccountPicture: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Color(0xFF0F1120),
+                      backgroundImage:
+                          auth.image != null ? FileImage(auth.image!) : null,
+                      child:
+                          auth.image == null
+                              ? Icon(
+                                Icons.person,
+                                size: 50,
+                                color: Color(0xFF656678),
+                              )
+                              : null,
+                    ),
+                    otherAccountsPictures: [
+                      GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: Icon(Icons.close, color: Colors.white),
+                      ),
+                    ],
+                  );
+                }
               ),
 
               buildDrawerItem(Icons.settings, 'Account Settings'),
