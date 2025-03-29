@@ -6,6 +6,7 @@ import 'package:karmakart/core/services/supabase_service.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
 import 'package:karmakart/providers/trade_provider.dart';
 import 'package:karmakart/screens/auth_screens/log_in.dart';
+import 'package:karmakart/screens/create_trade.dart';
 import 'package:karmakart/screens/dashboard_page.dart';
 import 'package:karmakart/screens/transaction_history.dart';
 import 'package:provider/provider.dart';
@@ -37,19 +38,13 @@ void main() async {
               (context, supabaseService, previousAuth) =>
                   previousAuth ?? AuthenticationProvider(supabaseService),
         ),
-        ChangeNotifierProxyProvider<SupabaseService, TradeProvider>(
-          create:
-              (context) => TradeProvider(
-                Provider.of<SupabaseService>(context, listen: false),
-              ),
-          update:
-              (context, supabaseService, previousTrade) =>
-                  previousTrade ?? TradeProvider(supabaseService),
-        ),
+        ChangeNotifierProvider<TradeProvider>(create: (_) => TradeProvider()),
         ChangeNotifierProvider<TransactionProvider>(
           create: (_) => TransactionProvider(),
         ),
-        ChangeNotifierProvider<ImageServices>(create: (_) => ImageServices(instance.client))
+        ChangeNotifierProvider<ImageServices>(
+          create: (_) => ImageServices(instance.client),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -69,7 +64,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(fontFamily: 'Inter'),
         debugShowCheckedModeBanner: false,
         // home: LogIn(),
-        home: SignUp(),
+        home: TradeCreationPage(),
       ),
     );
   }
