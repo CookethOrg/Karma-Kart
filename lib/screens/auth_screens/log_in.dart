@@ -265,27 +265,24 @@ class _SignupBottomState extends State<SignupBottom> {
                               password: pv.passwordController.text,
                             );
                             pv.setLoading(false);
-                            if (res != "logged in") {
-                              // Show error message
-                              print(res);
+                            if (res == "Logged in successfully") {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('Error: $res'),
+                                  content: Text('Account created successfully'),
                                   duration: const Duration(seconds: 5),
-                                ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Account created successfully!',
-                                  ),
-                                  duration: Duration(seconds: 3),
                                 ),
                               );
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                   builder: (context) => DashboardPage(),
+                                ),
+                              );
+                            } else {
+                              print(res);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(res),
+                                  duration: Duration(seconds: 3),
                                 ),
                               );
                             }
