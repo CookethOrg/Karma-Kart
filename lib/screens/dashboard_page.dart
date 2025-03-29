@@ -184,11 +184,14 @@ class _DashboardPageState extends State<DashboardPage> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Text(
-                  'View More >',
-                  style: TextStyle(
-                    color: const Color(0xff874fff),
-                    fontSize: 12,
+                InkWell(
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => RecommendedForYouPage(),)),
+                  child: Text(
+                    'View More >',
+                    style: TextStyle(
+                      color: const Color(0xff874fff),
+                      fontSize: 12,
+                    ),
                   ),
                 ),
               ],
