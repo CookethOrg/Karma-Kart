@@ -11,6 +11,7 @@ import 'package:karmakart/screens/auth_screens/skill_selection.dart';
 import 'package:karmakart/screens/auth_screens/verify_details.dart';
 import 'package:karmakart/screens/create_trade.dart';
 import 'package:karmakart/screens/dashboard_page.dart';
+import 'package:karmakart/screens/recommended_for_you_page.dart';
 import 'package:karmakart/screens/transaction_history.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -68,9 +69,9 @@ class MyApp extends StatelessWidget {
         title: 'Karma Kart',
         theme: ThemeData(fontFamily: 'Inter'),
         debugShowCheckedModeBanner: false,
-        home: LogIn(),
+        // home: RecommendedForYouPage(),
         // home: TradeCreationPage(),
-        // home: LogIn(),
+        home: LogIn(),
         // home: VerifyDetails(),
       ),
     );

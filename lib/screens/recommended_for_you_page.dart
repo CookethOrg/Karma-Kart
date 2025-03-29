@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:karmakart/core/widgets/dashboard_search_bar.dart';
 import 'package:karmakart/core/widgets/drawers/dashboard_drawer.dart';
-import 'package:karmakart/core/widgets/trade_card.dart';
+import '../core/widgets/trade_card_rfy.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
 import 'package:karmakart/screens/create_trade.dart';
+import 'package:karmakart/screens/dashboard_page.dart';
 import 'package:provider/provider.dart';
-import 'recommended_for_you_page.dart';
+import 'package:radix_icons/radix_icons.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class DashboardPage extends StatefulWidget {
-  const DashboardPage({super.key});
+class RecommendedForYouPage extends StatefulWidget {
+  const RecommendedForYouPage({super.key});
 
   @override
-  State<DashboardPage> createState() => _DashboardPageState();
+  State<RecommendedForYouPage> createState() => _RecommendedForYouPageState();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _RecommendedForYouPageState extends State<RecommendedForYouPage> {
   final List<Map<String, String>> _recommendedTrades = [
     {
       'name': 'Kat Dunphy',
@@ -59,14 +61,12 @@ class _DashboardPageState extends State<DashboardPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildTopBar(),
-                SizedBox(height: 24),
-                _buildGreetingSection("Daniel"),
-                SizedBox(height: 24),
+                SizedBox(height: 24.h),
+                _buildGreetingSection(),
+                SizedBox(height: 24.h),
                 DashboardSearchBar(),
-                SizedBox(height: 24),
+                SizedBox(height: 24.h),
                 _buildRecommendedSection(),
-                SizedBox(height: 24),
-                _buildTradesSection(),
               ],
             ),
           ),
@@ -76,7 +76,7 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _buildGreetingSection(String name) {
+  Widget _buildGreetingSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -84,19 +84,11 @@ class _DashboardPageState extends State<DashboardPage> {
           TextSpan(
             children: [
               TextSpan(
-                text: "Good Morning, ",
+                text: "Recommended for You",
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
+                  fontSize: 42.sp,
                   fontWeight: FontWeight.w500,
-                ),
-              ),
-              TextSpan(
-                text: name,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
@@ -116,7 +108,12 @@ class _DashboardPageState extends State<DashboardPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         GestureDetector(
-          onTap: () => _scaffoldKey.currentState?.openDrawer(),
+          onTap: () {
+            // Navigate back to DashboardPage
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => DashboardPage()),
+            );
+          },
           child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -124,38 +121,14 @@ class _DashboardPageState extends State<DashboardPage> {
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,
               ),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8.r), // Make responsive
             ),
-            padding: EdgeInsets.all(8),
-            child: Icon(Icons.menu, color: Colors.white),
-          ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xff020315), Color(0xff1d1f2e)],
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
+            padding: EdgeInsets.all(8.w), // Make responsive
+            child: Icon(
+              RadixIcons.Arrow_Left, // Corrected case (lowercase)
+              color: Colors.white,
+              size: 54.w, // Make responsive
             ),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          padding: EdgeInsets.all(8),
-          child: Stack(
-            children: [
-              Icon(Icons.notifications_none_outlined, color: Colors.white),
-              Positioned(
-                right: 0,
-                top: 0,
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: Colors.purple,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            ],
           ),
         ),
       ],
@@ -172,81 +145,26 @@ class _DashboardPageState extends State<DashboardPage> {
               'Recommended for you',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RecommendedForYouPage(),
-                  ),
-                );
-              },
-              child: Text(
-                'View More >',
-                style: TextStyle(color: const Color(0xff874fff), fontSize: 12),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 16),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children:
-                _recommendedTrades
-                    .map(
-                      (trade) => Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: TradeCard(
-                          trade: trade,
-                          cardType: TradeCardType.recommended,
-                        ),
-                      ),
-                    )
-                    .toList(),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTradesSection() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Your Trades',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
+                fontSize: 32.sp,
                 fontWeight: FontWeight.w600,
               ),
             ),
             Text(
               'View More >',
-              style: TextStyle(color: const Color(0xff874fff), fontSize: 12),
+              style: TextStyle(color: const Color(0xff874fff), fontSize: 25.sp),
             ),
           ],
         ),
-        SizedBox(height: 16),
+        SizedBox(height: 10.h),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Row(
+          child: Column(
             children:
-                _activeTrades
+                _recommendedTrades
                     .map(
                       (trade) => Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: TradeCard(
-                          trade: trade,
-                          cardType: TradeCardType.active,
-                        ),
+                        padding: EdgeInsets.only(right: 20.w),
+                        child: TradeCardRFY(trade: trade),
                       ),
                     )
                     .toList(),
@@ -310,10 +228,8 @@ class _DashboardPageState extends State<DashboardPage> {
       },
       child: Container(
         decoration: BoxDecoration(color: Colors.purple, shape: BoxShape.circle),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Icon(Icons.add, color: Colors.white),
-        ),
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(Icons.add, color: Colors.white),
       ),
     );
   }
