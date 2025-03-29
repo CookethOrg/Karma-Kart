@@ -6,9 +6,11 @@ import 'package:karmakart/providers/authentication_provider.dart';
 import 'package:karmakart/providers/trade_provider.dart';
 import 'package:karmakart/screens/auth_screens/log_in.dart';
 import 'package:karmakart/screens/dashboard_page.dart';
+import 'package:karmakart/screens/transaction_history.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'screens/auth_screens/sign_up.dart';
+import 'providers/transaction_history_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,6 +44,9 @@ void main() async {
           update:
               (context, supabaseService, previousTrade) =>
                   previousTrade ?? TradeProvider(supabaseService),
+        ),
+        ChangeNotifierProvider<TransactionProvider>(
+          create: (_) => TransactionProvider(),
         ),
       ],
       child: const MyApp(),
