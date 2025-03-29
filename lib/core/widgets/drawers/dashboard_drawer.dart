@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:karmakart/core/services/supabase_service.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
+import 'package:karmakart/screens/auth_screens/log_in.dart';
 import 'package:provider/provider.dart';
 
 class DashboardDrawer extends StatelessWidget {
@@ -17,8 +19,8 @@ class DashboardDrawer extends StatelessWidget {
       );
     }
 
-    return Consumer<AuthenticationProvider>(
-      builder: (context, auth, child) {
+    return Consumer2<AuthenticationProvider, SupabaseService>(
+      builder: (context, auth, supa, child) {
         return Drawer(
           backgroundColor: Color(0xFF0F1120),
           child: ListView(
@@ -80,7 +82,8 @@ class DashboardDrawer extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  // Handle logout logic
+                  supa.logout();
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LogIn(),));
                 },
               ),
               SizedBox(height: 16), // Adds some spacing at the bottom

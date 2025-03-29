@@ -44,9 +44,10 @@ Karma Kart is a unique **service exchange platform**, much like Upwork or Fiverr
 | Technology | Purpose |
 |------------|---------|
 | **Flutter** | Cross-platform UI development |
-| **Firebase/Supabase** | Authentication & database |
-| **Node.js** | Backend logic |
-| **WebSockets** | Real-time chat & notifications |
+| **Supabase** | Authentication & database |
+| **Postgres** | Database |
+| **Sockets** | Real-time chat & notifications |
+| **Fast-API** | Model wrapper |
 
 ---
 
@@ -54,7 +55,7 @@ Karma Kart is a unique **service exchange platform**, much like Upwork or Fiverr
 
 ### Prerequisites
 - Flutter SDK installed
-- Firebase/Supabase setup
+- Supabase setup
 - A code editor (VS Code / Android Studio recommended)
 
 ### Installation Steps

@@ -5,7 +5,10 @@ import 'package:karmakart/core/services/image_services.dart';
 import 'package:karmakart/core/services/supabase_service.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
 import 'package:karmakart/providers/trade_provider.dart';
+import 'package:karmakart/screens/auth_screens/bio_profile.dart';
 import 'package:karmakart/screens/auth_screens/log_in.dart';
+import 'package:karmakart/screens/auth_screens/skill_selection.dart';
+import 'package:karmakart/screens/auth_screens/verify_details.dart';
 import 'package:karmakart/screens/auth_screens/splash.dart';
 import 'package:karmakart/screens/create_trade.dart';
 import 'package:karmakart/screens/dashboard_page.dart';
@@ -39,7 +42,9 @@ void main() async {
               (context, supabaseService, previousAuth) =>
                   previousAuth ?? AuthenticationProvider(supabaseService),
         ),
-        ChangeNotifierProvider<TradeProvider>(create: (_) => TradeProvider(instance.client)),
+        ChangeNotifierProvider<TradeProvider>(
+          create: (_) => TradeProvider(instance.client),
+        ),
         ChangeNotifierProvider<TransactionProvider>(
           create: (_) => TransactionProvider(),
         ),
@@ -67,6 +72,8 @@ class MyApp extends StatelessWidget {
         home: Splash(),
         // home: LogIn(),
         // home: TradeCreationPage(),
+        // home: LogIn(),
+        // home: VerifyDetails(),
       ),
     );
   }
