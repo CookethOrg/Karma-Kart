@@ -217,52 +217,51 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Widget _buildTradesSection() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Consumer<TradeProvider>(
+      builder: (context, tp, child) {
+        return Column(
           children: [
-            Text(
-              'Your Trades',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Your Trades',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  'View More >',
+                  style: TextStyle(
+                    color: const Color(0xff874fff),
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children:
+                    tp.postedTrades
+                        .map(
+                          (trade) => Padding(
+                            padding: EdgeInsets.only(right: 16),
+                            child: TradeCard(
+                              trade: trade,
+                              cardType: TradeCardType.active,
+                            ),
+                          ),
+                        )
+                        .toList(),
               ),
             ),
-            Text(
-              'View More >',
-              style: TextStyle(color: const Color(0xff874fff), fontSize: 12),
-            ),
           ],
-        ),
-        SizedBox(height: 16),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children:
-                _activeTrades
-                    .map(
-                      (trade) => Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: TradeCard(
-                          trade: Trade(
-                            tradeId: 'fefeev',
-                            clientUserId: 'clientUserId',
-                            heading: 'heading',
-                            description: 'description',
-                            price: 5,
-                            expectedDeliveryTime: 'expectedDeliveryTime',
-                            tags: [],
-                          ),
-                          cardType: TradeCardType.active,
-                        ),
-                      ),
-                    )
-                    .toList(),
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 

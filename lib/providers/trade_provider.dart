@@ -16,6 +16,7 @@ class TradeProvider extends StateHandler {
   final TextEditingController _karmaPointsController = TextEditingController();
   final TextEditingController _deliveryDateController = TextEditingController();
   final List<Trade> _tradeList = [];
+  List<Trade> _postedTrades = [];
   bool _isLoading = false;
 
   // Other trade data
@@ -47,6 +48,7 @@ class TradeProvider extends StateHandler {
   List<String> get availableTags => List.unmodifiable(_availableTags);
   List<String> get myTags => _myTags;
   List<Trade> get tradeList => _tradeList;
+  List<Trade> get postedTrades => _postedTrades;
   bool get isLoading => _isLoading;
 
   // Duration setter
@@ -77,12 +79,21 @@ class TradeProvider extends StateHandler {
           .from('Trade')
           .select()
           .eq('isLive', true);
+      var ures = await supabaseClient
+          .from('Trade')
+          .select()
+          .eq('clientUserId', res.id);
       print('Supabase response received: $response');
       List<Map<String, dynamic>> dbTradeList = response;
+      List<Map<String, dynamic>> dbPostedTradeList = ures;
       print('Cast response to list');
       for (var trade in dbTradeList) {
         _tradeList.add(Trade.fromJson(trade));
         print('Added trade: ${trade['tradeId']}');
+      }
+
+      for (var trade in dbPostedTradeList) {
+        _postedTrades.add(Trade.fromJson(trade));
       }
       print('tradelist : $_tradeList');
       notifyListeners();
