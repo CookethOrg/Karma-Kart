@@ -50,7 +50,7 @@ class _DashboardPageState extends State<DashboardPage> {
       drawer: DashboardDrawer(),
       body: SafeArea(
         top: true,
-        minimum: EdgeInsets.only(top: 20), // Added top padding here
+        minimum: EdgeInsets.only(top: 20),
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
