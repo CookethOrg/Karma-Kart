@@ -114,6 +114,7 @@ class AuthenticationProvider extends StateHandler {
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
         res = await supabaseService.loginUser(email: email, password: password);
+        res = 'logged in';
       } else {
         res = 'Email and Password cannot be empty';
       }
