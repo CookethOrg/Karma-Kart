@@ -70,14 +70,7 @@ class MyApp extends StatelessWidget {
         title: 'Karma Kart',
         theme: ThemeData(fontFamily: 'Inter'),
         debugShowCheckedModeBanner: false,
-<<<<<<< HEAD
-        // home: Splash(),
         home: LogIn(),
-=======
-        // home: RecommendedForYouPage(),
-        home: Splash(),
-        // home: LogIn(),
->>>>>>> 79899f0de3aa980842291bdea0f56c9fbd6db0e4
         // home: TradeCreationPage(),
         // home: LogIn(),
         // home: VerifyDetails(),
