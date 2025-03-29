@@ -62,7 +62,7 @@ class TradeCard extends StatelessWidget {
         CircleAvatar(
           backgroundColor: Color(0xFF020315),
           child: Text(
-            trade.heading,
+            trade.heading[0],
             style: TextStyle(color: Colors.white),
           ),
         ),
