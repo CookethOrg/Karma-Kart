@@ -2,21 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:radix_icons/radix_icons.dart';
 
-class CustomDatePickerField extends StatelessWidget {
+class CustomDatePickerField extends StatefulWidget {
   final String label;
-  final DateTime? startDate;
-  final DateTime? endDate;
-  final ValueChanged<DateTime?> onStartDateChanged;
-  final ValueChanged<DateTime?> onEndDateChanged;
+  final String buttonText;
+  final TextEditingController controller;
+  final ValueChanged<DateTime?>? onDateChanged;
 
   const CustomDatePickerField({
-    Key? key,
+    super.key,
     required this.label,
-    this.startDate,
-    this.endDate,
-    required this.onStartDateChanged,
-    required this.onEndDateChanged,
-  }) : super(key: key);
+    required this.buttonText,
+    required this.controller,
+    this.onDateChanged,
+  });
+
+  @override
+  State<CustomDatePickerField> createState() => _CustomDatePickerFieldState();
+}
+
+class _CustomDatePickerFieldState extends State<CustomDatePickerField> {
+  DateTime? _selectedDate;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize from controller if it has a value
+    if (widget.controller.text.isNotEmpty) {
+      try {
+        final parts = widget.controller.text.split('/');
+        if (parts.length == 3) {
+          _selectedDate = DateTime(
+            int.parse(parts[2]), 
+            int.parse(parts[1]), 
+            int.parse(parts[0])
+          );
+        }
+      } catch (e) {
+        // Handle parsing error
+        _selectedDate = null;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +53,7 @@ class CustomDatePickerField extends StatelessWidget {
           text: TextSpan(
             children: [
               TextSpan(
-                text: label,
+                text: widget.label,
                 style: TextStyle(
                   fontSize: 24.sp,
                   fontWeight: FontWeight.bold,
@@ -49,21 +75,7 @@ class CustomDatePickerField extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: _buildDatePickerButton(
-                context,
-                'Start Date',
-                startDate,
-                onStartDateChanged,
-              ),
-            ),
-            SizedBox(width: 16.w),
-            Expanded(
-              child: _buildDatePickerButton(
-                context,
-                'End Date',
-                endDate,
-                onEndDateChanged,
-              ),
+              child: _buildDatePickerButton(context),
             ),
           ],
         ),
@@ -71,21 +83,30 @@ class CustomDatePickerField extends StatelessWidget {
     );
   }
 
-  Widget _buildDatePickerButton(
-    BuildContext context,
-    String buttonText,
-    DateTime? selectedDate,
-    ValueChanged<DateTime?> onDateChanged,
-  ) {
+  Widget _buildDatePickerButton(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
         final pickedDate = await showDatePicker(
           context: context,
-          initialDate: selectedDate ?? DateTime.now(),
+          initialDate: _selectedDate ?? DateTime.now(),
           firstDate: DateTime(2000),
           lastDate: DateTime(2101),
         );
-        onDateChanged(pickedDate);
+        
+        if (pickedDate != null) {
+          setState(() {
+            _selectedDate = pickedDate;
+          });
+          
+          // Format date as DD/MM/YYYY and save to controller
+          final formattedDate = '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}';
+          widget.controller.text = formattedDate;
+          
+          // Call the callback if provided
+          if (widget.onDateChanged != null) {
+            widget.onDateChanged!(pickedDate);
+          }
+        }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFF0F1120),
@@ -100,18 +121,18 @@ class CustomDatePickerField extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            selectedDate != null
-                ? '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}'
-                : buttonText,
+            _selectedDate != null
+                ? '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}'
+                : widget.buttonText,
             style: TextStyle(
               fontSize: 24.sp,
-              color: Color(0xFF656678),
+              color: _selectedDate != null ? Colors.white : const Color(0xFF656678),
             ),
           ),
           Icon(
             RadixIcons.Calendar,
             size: 32.sp,
-            color: Color(0XFF874FFF),
+            color: const Color(0XFF874FFF),
           ),
         ],
       ),
