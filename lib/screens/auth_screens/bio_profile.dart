@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 class BioProfileSetup extends StatelessWidget {
   BioProfileSetup({super.key});
-final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   // int _pageIndex = 2; // Default to Page 3 (0-based index)
   final List<FormFieldData> formFields = const [
     FormFieldData(
@@ -25,17 +25,17 @@ final _formKey = GlobalKey<FormState>();
     Widget buildHeader() {
       return Column(
         children: [
-          const Text(
+          Text(
             'Bio & Profile Setup',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 24,
+              fontSize: 60.sp,
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 27),
+          SizedBox(height: 16.h),
           SizedBox(
-            width: 164,
+            width: 400.w,
             child: Column(
               children: [
                 Row(
@@ -43,25 +43,25 @@ final _formKey = GlobalKey<FormState>();
                     4,
                     (index) => Expanded(
                       child: Container(
-                        height: 8,
-                        margin: const EdgeInsets.symmetric(horizontal: 1),
+                        height: 8.h,
+                        margin: EdgeInsets.symmetric(horizontal: 1.h),
                         decoration: BoxDecoration(
                           color:
                               index <= auth.pageIndex
                                   ? Colors.white
                                   : const Color(0xFF0F1120),
-                          borderRadius: BorderRadius.circular(19),
+                          borderRadius: BorderRadius.circular(19.r),
                         ),
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 11),
+                SizedBox(height: 11.h),
                 Text(
                   'Page ${auth.pageIndex + 1} of 4',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
-                    fontSize: 12,
+                    fontSize: 30.sp,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -78,34 +78,30 @@ final _formKey = GlobalKey<FormState>();
           GestureDetector(
             onTap: auth.pickImage,
             child: CircleAvatar(
-              radius: 50,
+              radius: 100.r,
               backgroundColor: const Color(0xFF0F1120),
               backgroundImage:
                   auth.image != null ? FileImage(auth.image!) : null,
               child:
                   auth.image == null
-                      ? const Icon(
-                        Icons.person,
-                        size: 50,
-                        color: Color(0xFF656678),
-                      )
+                      ? Icon(Icons.person, size: 30.h, color: Color(0xFF656678))
                       : null,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 6.h),
           GestureDetector(
             onTap: auth.pickImage,
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 24.w),
               decoration: BoxDecoration(
-                border: Border.all(color: Color(0xff101123), width: 1),
-                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Color(0xff101123), width: 1.w),
+                borderRadius: BorderRadius.circular(8.r),
               ),
-              child: const Text(
+              child: Text(
                 'Upload Image',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 12,
+                  fontSize: 25.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -121,18 +117,18 @@ final _formKey = GlobalKey<FormState>();
           children: [
             TextSpan(
               text: field.label,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
-                fontSize: 12,
+                fontSize: 25.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),
             if (field.required)
-              const TextSpan(
+              TextSpan(
                 text: '*',
                 style: TextStyle(
                   color: Color(0xFFF24822),
-                  fontSize: 12,
+                  fontSize: 25.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -150,36 +146,33 @@ final _formKey = GlobalKey<FormState>();
       return TextFormField(
         controller: controller,
         maxLines: maxLines,
-        style: const TextStyle(
+        style: TextStyle(
           color: Colors.white,
-          fontSize: 12,
+          fontSize: 25.sp,
           fontWeight: FontWeight.w500,
         ),
         decoration: InputDecoration(
           hintText: placeholder,
-          hintStyle: const TextStyle(
+          hintStyle: TextStyle(
             color: Color(0xFF656678),
-            fontSize: 12,
+            fontSize: 25.sp,
             fontWeight: FontWeight.w500,
           ),
           filled: true,
           fillColor: const Color(0xFF0F1120),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 12,
-          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(8.r),
             borderSide: BorderSide.none,
           ),
-          errorStyle: const TextStyle(color: Color(0xFFF24822), fontSize: 10),
+          errorStyle: TextStyle(color: Color(0xFFF24822), fontSize: 22.sp),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Color(0xFFF24822), width: 1),
+            borderSide: BorderSide(color: Color(0xFFF24822), width: 1.w),
           ),
           focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Color(0xFFF24822), width: 1),
+            borderRadius: BorderRadius.circular(8.r),
+            borderSide: BorderSide(color: Color(0xFFF24822), width: 1.w),
           ),
         ),
         validator: validator,
@@ -191,12 +184,12 @@ final _formKey = GlobalKey<FormState>();
       return Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 24),
+            padding: EdgeInsets.only(bottom: 24.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 buildFieldLabel(formFields[0]),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 buildTextField(
                   controller: auth.bioController,
                   placeholder: formFields[0].placeholder ?? '',
@@ -214,12 +207,12 @@ final _formKey = GlobalKey<FormState>();
                 ),
                 if (formFields[0].hint != null)
                   Padding(
-                    padding: const EdgeInsets.only(top: 8),
+                    padding: EdgeInsets.only(top: 8.h),
                     child: Text(
                       formFields[0].hint!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Color(0xFF656678),
-                        fontSize: 12,
+                        fontSize: 25.sp,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -240,17 +233,17 @@ final _formKey = GlobalKey<FormState>();
       return GestureDetector(
         onTap: onPressed,
         child: Container(
-          height: 48,
+          height: 48.h,
           decoration: BoxDecoration(
             color: backgroundColor,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(8.r),
           ),
           child: Center(
             child: Text(
               text,
               style: TextStyle(
                 color: textColor,
-                fontSize: 12,
+                fontSize: 25.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -261,17 +254,14 @@ final _formKey = GlobalKey<FormState>();
 
     Widget buildBottomSection() {
       return Container(
-        height: 97,
+        height: 45.h,
         color: const Color(0xFF020315),
         child: Column(
           children: [
-            Container(height: 1, color: const Color(0xFF101123)),
+            Container(height: 1.h, color: const Color(0xFF101123)),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 36,
-                  vertical: 24,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 90.w, vertical: 10.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -286,7 +276,7 @@ final _formKey = GlobalKey<FormState>();
                         },
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12.h),
                     Expanded(
                       child: buildButton(
                         text: 'Next',
@@ -333,7 +323,7 @@ final _formKey = GlobalKey<FormState>();
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 37),
+                          padding: EdgeInsets.symmetric(horizontal: 70.w),
                           child: Form(
                             key: _formKey,
                             child: SingleChildScrollView(
@@ -342,9 +332,9 @@ final _formKey = GlobalKey<FormState>();
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   buildHeader(),
-                                  const SizedBox(height: 40),
+                                  SizedBox(height: 15.h),
                                   buildImageUploadSection(),
-                                  const SizedBox(height: 24),
+                                  SizedBox(height: 15.h),
                                   buildFormFields(),
                                 ],
                               ),

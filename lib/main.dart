@@ -5,7 +5,10 @@ import 'package:karmakart/core/services/image_services.dart';
 import 'package:karmakart/core/services/supabase_service.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
 import 'package:karmakart/providers/trade_provider.dart';
+import 'package:karmakart/screens/auth_screens/bio_profile.dart';
 import 'package:karmakart/screens/auth_screens/log_in.dart';
+import 'package:karmakart/screens/auth_screens/skill_selection.dart';
+import 'package:karmakart/screens/auth_screens/verify_details.dart';
 import 'package:karmakart/screens/create_trade.dart';
 import 'package:karmakart/screens/dashboard_page.dart';
 import 'package:karmakart/screens/transaction_history.dart';
@@ -64,7 +67,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(fontFamily: 'Inter'),
         debugShowCheckedModeBanner: false,
         // home: LogIn(),
-        home: TradeCreationPage(),
+        home: VerifyDetails(),
       ),
     );
   }
