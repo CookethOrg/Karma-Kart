@@ -1,8 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:karmakart/core/utils/state_handler.dart';
+import 'package:karmakart/models/trade.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 class TradeProvider extends StateHandler {
+  SupabaseClient supabaseClient;
+  TradeProvider(this.supabaseClient) : super();
   // Controllers for text fields
   final TextEditingController _headingController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -23,7 +28,7 @@ class TradeProvider extends StateHandler {
     'Python',
     'Writing',
     'VideoGraphy',
-    'Cameraman'
+    'Cameraman',
   ];
   final List<String> _selectedTags = [];
   List<String> _myTags = [];
@@ -92,6 +97,45 @@ class TradeProvider extends StateHandler {
     notifyListeners();
   }
 
+  Future<String> createTrade({
+    required String heading,
+    required String description,
+    required List<String> tags,
+    required double price,
+    required String expectedDeliveryDate,
+  }) async {
+    String res = 'Some error occured';
+    try {
+      String txid = Uuid().v4();
+      final userId = supabaseClient.auth.currentUser?.id;
+      final newTrade = Trade(
+        tradeId: txid,
+        clientUserId: userId!,
+        description: description,
+        tags: tags,
+        price: price,
+        expectedDeliveryTime: expectedDeliveryDate,
+      );
+
+      await supabaseClient.from('Trade').insert({
+        'tradeId': newTrade.tradeId,
+        'clientUserId': newTrade.clientUserId,
+        'heading': newTrade.heading,
+        'description': newTrade.description,
+        'tags': newTrade.tags,
+        'price': newTrade.price,
+        'expectedDeliveryTime': newTrade.expectedDeliveryTime,
+        'hoursPerDay': newTrade.hoursPerDay,
+        // 'urgency': newTrade.urgency,
+        'isFav': newTrade.isFav,
+      });
+      res = 'Trade Posted';
+    } catch (e) {
+      return e.toString();
+    }
+    return res;
+  }
+
   // Clear all data
   void clearAll() {
     _headingController.clear();
@@ -103,23 +147,12 @@ class TradeProvider extends StateHandler {
     notifyListeners();
   }
 
-  // Get trade data
-  Map<String, dynamic> getTradeData() {
-    return {
-      'heading': _headingController.text.trim(),
-      'description': _descriptionController.text.trim(),
-      'karmaPoints': int.tryParse(_karmaPointsController.text) ?? 0,
-      // 'startDate': _startDate?.toIso8601String(),
-      'endDate': _endDate?.toIso8601String(),
-      'tags': List.from(_selectedTags),
-    };
-  }
-
   @override
   void dispose() {
     _headingController.dispose();
     _descriptionController.dispose();
     _karmaPointsController.dispose();
+    _deliveryDateController.dispose();
     super.dispose();
   }
 }

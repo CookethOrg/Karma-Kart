@@ -1,7 +1,11 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:karmakart/core/widgets/buttons/authbuttons.dart';
 import 'package:karmakart/core/widgets/custom_tag_selector.dart';
 import 'package:karmakart/providers/trade_provider.dart';
+import 'package:karmakart/screens/dashboard_page.dart';
 import 'package:provider/provider.dart';
 import 'package:radix_icons/radix_icons.dart';
 import 'package:karmakart/core/widgets/text fields/text_field.dart';
@@ -71,6 +75,45 @@ class TradeCreationPage extends StatelessWidget {
                       SizedBox(height: 16.h),
                       CustomKarmaPointsField(
                         controller: tradeProvider.karmaPointsController,
+                      ),
+                      SizedBox(height: 16.h),
+                      Authbuttons(
+                        text: 'Proceed',
+                        backgroundColor: Colors.white,
+                        onPressed: () async {
+                          final res = await tradeProvider.createTrade(
+                            heading: tradeProvider.headingController.text,
+                            description:
+                                tradeProvider.descriptionController.text,
+                            tags: tradeProvider.myTags,
+                            price: double.parse(
+                              tradeProvider.karmaPointsController.text,
+                            ),
+                            expectedDeliveryDate: tradeProvider.deliveryDateController.text,
+                          );
+                          if (res == 'Trade Posted') {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Trade Posted Successfully!'),
+                                duration: Duration(seconds: 3),
+                              ),
+                            );
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => DashboardPage(),
+                              ),
+                            );
+                          } else {
+                            print(res);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(res),
+                                duration: Duration(seconds: 3),
+                              ),
+                            );
+                          }
+                        },
+                        textColor: Colors.black,
                       ),
                     ],
                   ),

@@ -5,11 +5,11 @@ class Trade {
   String clientUserId;
   String heading;
   String description;
-  List<ServiceTags> tags;
+  List<String> tags;
   double price;
-  DateTime expectedDeliveryTime;
+  String expectedDeliveryTime;
   int hoursPerDay;
-  Urgency urgency;
+  // Urgency urgency;
   bool isFav;
 
   Trade({
@@ -19,10 +19,11 @@ class Trade {
     required this.description,
     required this.price,
     required this.expectedDeliveryTime,
-    required this.hoursPerDay,
-    this.urgency = Urgency.medium,
-    this.isFav = false
-  }) : tags = <ServiceTags>[];
+    this.hoursPerDay = 4,
+    required this.tags,
+    // this.urgency = Urgency.medium,
+    this.isFav = false,
+  });
 
   Map<String, dynamic> toJson() {
     return {
@@ -34,8 +35,8 @@ class Trade {
       "price": price,
       "expectedDeliveryTime": expectedDeliveryTime,
       "hoursPerDay": hoursPerDay,
-      "urgency": urgency,
-      "isFav" : isFav
+      // "urgency": urgency,
+      "isFav": isFav,
     };
   }
 
@@ -45,16 +46,17 @@ class Trade {
       clientUserId: json["clientUserId"],
       description: json["description"],
       price: json["price"],
+      tags: json["tags"],
       expectedDeliveryTime: json["expectedDeliveryTime"],
       hoursPerDay: json["hoursPerDay"],
-      urgency: json["urgency"],
-      isFav: json["isFav"]
+      // urgency: json["urgency"],
+      isFav: json["isFav"],
     );
-    if (json["tags"] != null) {
-      for (var i in json["tags"]) {
-        trade.tags.add(i);
-      }
-    }
+    // if (json["tags"] != null) {
+    //   for (var i in json["tags"]) {
+    //     trade.tags.add(i);
+    //   }
+    // }
 
     return trade;
   }

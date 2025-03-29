@@ -38,7 +38,7 @@ void main() async {
               (context, supabaseService, previousAuth) =>
                   previousAuth ?? AuthenticationProvider(supabaseService),
         ),
-        ChangeNotifierProvider<TradeProvider>(create: (_) => TradeProvider()),
+        ChangeNotifierProvider<TradeProvider>(create: (_) => TradeProvider(instance.client)),
         ChangeNotifierProvider<TransactionProvider>(
           create: (_) => TransactionProvider(),
         ),
@@ -63,8 +63,8 @@ class MyApp extends StatelessWidget {
         title: 'Karma Kart',
         theme: ThemeData(fontFamily: 'Inter'),
         debugShowCheckedModeBanner: false,
-        // home: LogIn(),
-        home: TradeCreationPage(),
+        home: LogIn(),
+        // home: TradeCreationPage(),
       ),
     );
   }
