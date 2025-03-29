@@ -172,7 +172,7 @@ class _AllTradesPageState extends State<AllTradesPage> {
                         Icon(Icons.circle, color: Colors.amber, size: 8),
                         SizedBox(width: 4),
                         Text(
-                          trade.tradeProgress.toString(),
+                          trade.tradeProgress.name,
                           style: TextStyle(color: Colors.amber, fontSize: 12),
                         ),
                       ],
