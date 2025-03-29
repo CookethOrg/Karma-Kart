@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:radix_icons/radix_icons.dart'; // Import Radix Icons
 
 class TopBar extends StatelessWidget {
   final VoidCallback? onBackPressed;
@@ -11,23 +12,9 @@ class TopBar extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment:
+            MainAxisAlignment.end, // Align items to the end (right)
         children: [
-          GestureDetector(
-            onTap: onBackPressed ?? () => Navigator.pop(context),
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xff020315), Color(0xff1d1f2e)],
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                ),
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-              padding: EdgeInsets.all(8.w),
-              child: Icon(Icons.arrow_back, color: Colors.white, size: 50.w),
-            ),
-          ),
           Container(
             decoration: BoxDecoration(
               gradient: const LinearGradient(
@@ -39,7 +26,7 @@ class TopBar extends StatelessWidget {
             ),
             padding: EdgeInsets.all(8.w),
             child: Icon(
-              Icons.calendar_today_outlined,
+              RadixIcons.Calendar, // Using Radix calendar icon
               color: Colors.white,
               size: 50.w,
             ),
