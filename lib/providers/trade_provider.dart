@@ -7,12 +7,16 @@ import 'package:uuid/uuid.dart';
 
 class TradeProvider extends StateHandler {
   SupabaseClient supabaseClient;
-  TradeProvider(this.supabaseClient) : super();
+  TradeProvider(this.supabaseClient) : super() {
+    initializeTradeList();
+  }
   // Controllers for text fields
   final TextEditingController _headingController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _karmaPointsController = TextEditingController();
   final TextEditingController _deliveryDateController = TextEditingController();
+  final List<Trade> _tradeList = [];
+  bool _isLoading = false;
 
   // Other trade data
   // DateTime? _startDate;
@@ -38,17 +42,56 @@ class TradeProvider extends StateHandler {
   TextEditingController get descriptionController => _descriptionController;
   TextEditingController get karmaPointsController => _karmaPointsController;
   TextEditingController get deliveryDateController => _deliveryDateController;
-  // DateTime? get startDate => _startDate;
   DateTime? get endDate => _endDate;
   List<String> get selectedTags => List.unmodifiable(_selectedTags);
   List<String> get availableTags => List.unmodifiable(_availableTags);
   List<String> get myTags => _myTags;
+  List<Trade> get tradeList => _tradeList;
+  bool get isLoading => _isLoading;
 
   // Duration setter
   void setDuration(DateTime? end) {
     // _startDate = start;
     _endDate = end;
     notifyListeners();
+  }
+
+  void setLoading(bool val) {
+    if (_isLoading != val) _isLoading = val;
+    notifyListeners();
+  }
+
+  Future<void> initializeTradeList() async {
+    print('Starting initializeTradeList');
+    setLoading(true);
+    try {
+      var res = supabaseClient.auth.currentUser;
+      print('Current user: $res');
+      if (res == null) {
+        print('No Authenticated user found');
+        setLoading(false);
+        return;
+      }
+      print('About to query Supabase');
+      var response = await supabaseClient
+          .from('Trade')
+          .select()
+          .eq('isLive', true);
+      print('Supabase response received: $response');
+      List<Map<String, dynamic>> dbTradeList = response;
+      print('Cast response to list');
+      for (var trade in dbTradeList) {
+        _tradeList.add(Trade.fromJson(trade));
+        print('Added trade: ${trade['tradeId']}');
+      }
+      print('tradelist : $_tradeList');
+      notifyListeners();
+    } catch (e) {
+      print('Error in initializeTradeList: ${e.toString()}');
+      setLoading(false);
+    } finally {
+      setLoading(false); // Make sure loading is set to false in all cases
+    }
   }
 
   // Add a tag
