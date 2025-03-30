@@ -29,69 +29,73 @@ class _AllTradesPageState extends State<AllTradesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Color(0xFF020315),
-      drawer: DashboardDrawer(),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 20),
-                _buildTopBar(),
-                SizedBox(height: 15.h),
-                _buildHeader(),
-                SizedBox(height: 12.h),
-                _buildSearchBar(),
-                SizedBox(height: 20.h),
-                _buildTabs(),
-                SizedBox(height: 20.h),
-                _buildTradesList(),
-              ],
+    return Consumer<TradeProvider>(
+      builder: (context,tp,child) {
+        return Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: Color(0xFF020315),
+          drawer: DashboardDrawer(),
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 20),
+                    _buildTopBar(),
+                    SizedBox(height: 15.h),
+                    _buildHeader(),
+                    SizedBox(height: 12.h),
+                    _buildSearchBar(),
+                    SizedBox(height: 20.h),
+                    _buildTabs(),
+                    SizedBox(height: 20.h),
+                    _buildTradesList(tp),
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        selectedIndex: _selectedIndex,
-        onItemSelected: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          // Handle navigation logic here
-          switch (index) {
-            case 0:
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (context) => DashboardPage()));
-              print("Navigating to Home");
-              break;
-            case 1:
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => RecommendedForYouPage(),
-                ),
-              );
-              print("Navigating to Sync");
-              break;
-            case 2:
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => TradeCreationPage()),
-              );
-            case 3:
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (context) => AllTradesPage()));
-            case 4:
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (context) => ProfilePage()));
-          }
-        },
-      ),
+          bottomNavigationBar: CustomBottomNavBar(
+            selectedIndex: _selectedIndex,
+            onItemSelected: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+              // Handle navigation logic here
+              switch (index) {
+                case 0:
+                  Navigator.of(
+                    context,
+                  ).push(MaterialPageRoute(builder: (context) => DashboardPage()));
+                  print("Navigating to Home");
+                  break;
+                case 1:
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => RecommendedForYouPage(),
+                    ),
+                  );
+                  print("Navigating to Sync");
+                  break;
+                case 2:
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => TradeCreationPage()),
+                  );
+                case 3:
+                  Navigator.of(
+                    context,
+                  ).push(MaterialPageRoute(builder: (context) => AllTradesPage()));
+                case 4:
+                  Navigator.of(
+                    context,
+                  ).push(MaterialPageRoute(builder: (context) => ProfilePage()));
+              }
+            },
+          ),
+        );
+      }
     );
   }
 
@@ -258,9 +262,9 @@ class _AllTradesPageState extends State<AllTradesPage> {
     );
   }
 
-  Widget _buildTradesList() {
+  Widget _buildTradesList(TradeProvider tp) {
     // Choose which data to display based on selected tab
-    final TradeProvider tp = Provider.of<TradeProvider>(context, listen: false);
+    // final TradeProvider tp = Provider.of<TradeProvider>(context, listen: false);
     final dataToDisplay =
         selectedTabIndex == 0 ? tp.yourTrades : tp.postedTrades;
 

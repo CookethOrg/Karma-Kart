@@ -173,7 +173,7 @@ class SupabaseService extends StateHandler {
   Future<void> logout() async {
     try {
       await supabase.auth.signOut();
-      dispose();
+      // dispose();
     } catch (e) {
       throw Exception('Error logging out: ${e.toString()}');
     }

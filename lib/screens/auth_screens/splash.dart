@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:karmakart/screens/auth_screens/log_in.dart";
 import 'dart:async';
 
 import "../../core/theme/app_theme.dart";
@@ -19,7 +20,7 @@ class _SplashState extends State<Splash> {
     Future.delayed(const Duration(seconds: 4), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => SignUp()),
+        MaterialPageRoute(builder: (context) => LogIn()),
       );
     });
   }
@@ -48,7 +49,7 @@ class _SplashState extends State<Splash> {
             ),
             SizedBox(height: 4.h),
             Text(
-              "Cool tagline",
+              "Swap skills, level up",
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Color(0xFF656678),

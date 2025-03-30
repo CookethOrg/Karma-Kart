@@ -95,6 +95,9 @@ class TradeProvider extends StateHandler {
       List<Map<String, dynamic>> dbTradeList = response;
       List<Map<String, dynamic>> dbPostedTradeList = ures;
       List<Map<String, dynamic>> dbYourTrades = yourTrades;
+      _yourTrades.clear();
+      _postedTrades.clear();
+      _tradeList.clear();
       print('Cast response to list');
       for (var trade in dbTradeList) {
         _tradeList.add(Trade.fromJson(trade));
@@ -266,7 +269,7 @@ class TradeProvider extends StateHandler {
         'tradeId': newTrade.tradeId,
         'clientUserId': newTrade.clientUserId,
         'heading': newTrade.heading,
-        'responseTradeId' : newTrade.responseTradeId,
+        'responseTradeId': newTrade.responseTradeId,
         'description': newTrade.description,
         'tradeProgress': newTrade.tradeProgress.toString(),
         'approachee': newTrade.approachee,
@@ -330,7 +333,7 @@ class TradeProvider extends StateHandler {
       await supabaseClient.from('Trade').insert({
         'tradeId': newTrade.tradeId,
         'clientUserId': newTrade.clientUserId,
-        'responseTradeId' : newTrade.responseTradeId,
+        'responseTradeId': newTrade.responseTradeId,
         'heading': newTrade.heading,
         'description': newTrade.description,
         'tradeProgress':
