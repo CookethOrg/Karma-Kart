@@ -1,0 +1,323 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:radix_icons/radix_icons.dart';
+
+class AuthTagSelector extends StatefulWidget {
+  final List<String>? initialTags; // Optional initial tags
+  final List<String> availableTags; // Predefined list of available tags
+  final Function(List<String>)? onTagsChanged; // Callback when tags change
+
+  const AuthTagSelector({
+    super.key,
+    this.initialTags,
+    required this.availableTags,
+    this.onTagsChanged,
+  });
+
+  @override
+  State<AuthTagSelector> createState() => _AuthTagSelectorState();
+}
+
+class _AuthTagSelectorState extends State<AuthTagSelector> {
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+  OverlayEntry? _overlayEntry;
+  final LayerLink _layerLink = LayerLink();
+  bool _isSearching = false;
+  double _overlayOffset = 0;
+  bool _showAbove = false;
+  bool _isDisposed = false;
+  List<String> _selectedTags = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize with any provided tags
+    if (widget.initialTags != null && widget.initialTags!.isNotEmpty) {
+      _selectedTags = List.from(widget.initialTags!);
+    }
+
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        // Add a small delay to ensure keyboard is fully shown before showing overlay
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (!_isDisposed) {
+            _showOverlay();
+          }
+        });
+      } else {
+        _hideOverlay();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true;
+    _hideOverlay();
+    _focusNode.dispose();
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _showOverlay() {
+    if (_isDisposed || !mounted) return;
+
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+    final size = renderBox.size;
+
+    // Calculate visible area considering keyboard
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final position = renderBox.localToGlobal(Offset.zero);
+
+    // Available space below the input field
+    final availableSpaceBelow =
+        screenHeight - position.dy - size.height - keyboardHeight;
+    // Available space above the input field
+    final availableSpaceAbove = position.dy;
+
+    // Desired dropdown height
+    final dropdownHeight = 70.h;
+
+    // Determine whether to show above or below
+    _showAbove =
+        availableSpaceBelow < dropdownHeight &&
+        availableSpaceAbove > availableSpaceBelow;
+
+    if (_showAbove) {
+      // Position above with proper offset (negative to go up)
+      _overlayOffset = -dropdownHeight;
+    } else {
+      // Position below with small gap
+      _overlayOffset = size.height + 1.h;
+    }
+
+    _overlayEntry = OverlayEntry(
+      builder:
+          (context) => Positioned(
+            width: size.width,
+            child: CompositedTransformFollower(
+              link: _layerLink,
+              showWhenUnlinked: false,
+              offset: Offset(0, _overlayOffset),
+              child: Material(
+                elevation: 4,
+                borderRadius: BorderRadius.circular(12.r),
+                color: const Color(0xFF1A1E2E),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight:
+                        _showAbove
+                            ? min(dropdownHeight, availableSpaceAbove - 16.h)
+                            : min(dropdownHeight, availableSpaceBelow - 16.h),
+                    maxWidth: size.width,
+                  ),
+                  child: _buildSearchDropdown(),
+                ),
+              ),
+            ),
+          ),
+    );
+
+    if (!_isDisposed && mounted) {
+      Overlay.of(context).insert(_overlayEntry!);
+      setState(() => _isSearching = true);
+    }
+  }
+
+  // Helper function to get the minimum of two numbers
+  double min(double a, double b) => a < b ? a : b;
+
+  void _hideOverlay() {
+    if (_overlayEntry != null) {
+      _overlayEntry!.remove();
+      _overlayEntry = null;
+    }
+
+    if (!_isDisposed && mounted) {
+      setState(() {
+        _isSearching = false;
+      });
+    }
+  }
+
+  void _addTag(String tag) {
+    if (!_selectedTags.contains(tag) && _selectedTags.length < 5) {
+      setState(() {
+        _selectedTags.add(tag);
+      });
+
+      if (widget.onTagsChanged != null) {
+        widget.onTagsChanged!(_selectedTags);
+      }
+    }
+  }
+
+  void _removeTag(String tag) {
+    setState(() {
+      _selectedTags.remove(tag);
+    });
+
+    if (widget.onTagsChanged != null) {
+      widget.onTagsChanged!(_selectedTags);
+    }
+  }
+
+  Widget _buildSearchDropdown() {
+    final filteredTags =
+        widget.availableTags
+            .where(
+              (tag) =>
+                  tag.toLowerCase().contains(
+                    _searchController.text.toLowerCase(),
+                  ) &&
+                  !_selectedTags.contains(tag),
+            )
+            .toList();
+
+    if (filteredTags.isEmpty) {
+      return Padding(
+        padding: EdgeInsets.all(16.w),
+        child: Text(
+          'No matching tags found',
+          style: TextStyle(
+            color: Colors.white.withOpacity(0.7),
+            fontSize: 16.sp,
+          ),
+        ),
+      );
+    }
+
+    return ScrollConfiguration(
+      behavior: ScrollConfiguration.of(context).copyWith(
+        scrollbars: true,
+        overscroll: false,
+        physics: const ClampingScrollPhysics(),
+      ),
+      child: ListView.builder(
+        shrinkWrap: true,
+        padding: EdgeInsets.symmetric(vertical: 8.h),
+        itemCount: filteredTags.length,
+        itemBuilder: (context, index) {
+          final tag = filteredTags[index];
+          return ListTile(
+            dense: true,
+            onTap: () {
+              _addTag(tag);
+              _searchController.clear();
+              _focusNode.unfocus();
+            },
+            contentPadding: EdgeInsets.symmetric(horizontal: 16.w),
+            hoverColor: Colors.white.withOpacity(0.1),
+            title: Text(
+              tag,
+              style: TextStyle(color: Colors.white, fontSize: 18.sp),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CompositedTransformTarget(
+          link: _layerLink,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 3.h),
+            decoration: BoxDecoration(
+              color: const Color(0xFF141625),
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(
+                color:
+                    _isSearching
+                        ? Colors.white.withOpacity(0.3)
+                        : Colors.white.withOpacity(0.1),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: _searchController,
+                  focusNode: _focusNode,
+                  style: TextStyle(color: Colors.white, fontSize: 22.sp),
+                  decoration: InputDecoration(
+                    hintText:
+                        _selectedTags.length < 5
+                            ? "Search or add tags (up to 5)"
+                            : "Maximum 5 tags reached",
+                    hintStyle: TextStyle(
+                      color: Colors.white.withOpacity(0.5),
+                      fontSize: 22.sp,
+                    ),
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.zero,
+                    suffixIcon:
+                        _isSearching
+                            ? IconButton(
+                              icon: Icon(
+                                Icons.search,
+                                color: Colors.white.withOpacity(0.7),
+                                size: 24.sp,
+                              ),
+                              onPressed: null,
+                            )
+                            : null,
+                  ),
+                  onChanged: (value) {
+                    if (_overlayEntry != null) {
+                      _overlayEntry!.markNeedsBuild();
+                    }
+                  },
+                  enabled: _selectedTags.length < 5,
+                ),
+                if (_selectedTags.isNotEmpty) SizedBox(height: 12.h),
+                Wrap(
+                  spacing: 8.w,
+                  runSpacing: 8.h,
+                  children:
+                      _selectedTags.map((tag) {
+                        return _buildTagChip(tag);
+                      }).toList(),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTagChip(String tag) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1D1F2E),
+        borderRadius: BorderRadius.circular(20.r),
+        border: Border.all(color: Colors.transparent),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(tag, style: TextStyle(color: Colors.white, fontSize: 20.sp)),
+          SizedBox(width: 8.w),
+          GestureDetector(
+            onTap: () {
+              _removeTag(tag);
+            },
+            child: Icon(
+              RadixIcons.Cross_1,
+              size: 18.sp,
+              color: Colors.white.withOpacity(0.8),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
