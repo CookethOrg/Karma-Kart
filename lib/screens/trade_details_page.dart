@@ -5,6 +5,7 @@ import 'package:karmakart/core/widgets/drawers/dashboard_drawer.dart';
 import 'package:karmakart/models/trade.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
 import 'package:karmakart/providers/trade_provider.dart';
+import 'package:karmakart/screens/create_trade.dart';
 import 'package:karmakart/screens/dashboard_page.dart';
 import 'package:provider/provider.dart';
 import 'package:radix_icons/radix_icons.dart';
@@ -176,28 +177,38 @@ class _TradeDetailsPageState extends State<TradeDetailsPage> {
   }
 
   Widget _buildRequestButton() {
-    return GestureDetector(
-          onTap: () {},
-          child: Center(
-            child: Container(
-              width: 300.w,
-              height: 20.h,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-              child: Center(
-                child: Text(
-                  "Send Request",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 25.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+  return GestureDetector(
+    onTap: () {
+      // Navigate to TradeCreationPage, passing the original trade and indicating it's a response trade
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => TradeCreationPage(
+            originalTrade: widget.trade, // Pass the original trade
+            isResponseTrade: true, // Indicate this is a response trade
+          ),
+        ),
+      );
+    },
+    child: Center(
+      child: Container(
+        width: 300.w,
+        height: 20.h,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.r),
+        ),
+        child: Center(
+          child: Text(
+            "Send Request",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 25.sp,
+              fontWeight: FontWeight.bold,
             ),
           ),
-        );
-  }
+        ),
+      ),
+    ),
+  );
+}
 }

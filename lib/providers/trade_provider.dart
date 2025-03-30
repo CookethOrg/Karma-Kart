@@ -250,8 +250,8 @@ class TradeProvider extends StateHandler {
         'clientUserId': newTrade.clientUserId,
         'heading': newTrade.heading,
         'description': newTrade.description,
-        'tradeProgress' : newTrade.tradeProgress.toString(),
-        'approachee' : newTrade.approachee,
+        'tradeProgress': newTrade.tradeProgress.toString(),
+        'approachee': newTrade.approachee,
         'tags': newTrade.tags,
         'price': newTrade.price,
         'expectedDeliveryTime': newTrade.expectedDeliveryTime,
@@ -261,6 +261,67 @@ class TradeProvider extends StateHandler {
       });
       updateTradeLists();
       res = 'Trade Posted';
+    } catch (e) {
+      return e.toString();
+    }
+    return res;
+  }
+
+  Future<String> createResponseTrade({
+    required Trade originalTrade,
+    required String heading,
+    required String description,
+    required List<String> tags,
+    required double price,
+    required String expectedDeliveryDate,
+  }) async {
+    String res = 'Some error occurred';
+    try {
+      // Step 1: Update the original trade's approachee field with the current user's ID
+      final approacheeId = supabaseClient.auth.currentUser?.id;
+      if (approacheeId == null) {
+        return 'No authenticated user found';
+      }
+
+      await supabaseClient
+          .from('Trade')
+          .update({'approachee': approacheeId})
+          .eq('tradeId', originalTrade.tradeId);
+
+      // Step 2: Create a new response trade
+      String txid = const Uuid().v4();
+      final newTrade = Trade(
+        tradeProgress: TradeProgress.live,
+        approachee:
+            originalTrade
+                .clientUserId, // Original creator becomes the approachee
+        tradeId: txid,
+        heading: heading,
+        clientUserId:
+            approacheeId, // Current user (approachee) becomes the client
+        description: description,
+        tags: tags,
+        price: price,
+        expectedDeliveryTime: expectedDeliveryDate,
+      );
+
+      await supabaseClient.from('Trade').insert({
+        'tradeId': newTrade.tradeId,
+        'clientUserId': newTrade.clientUserId,
+        'heading': newTrade.heading,
+        'description': newTrade.description,
+        'tradeProgress': newTrade.tradeProgress.toString(),
+        'approachee': newTrade.approachee,
+        'tags': newTrade.tags,
+        'price': newTrade.price,
+        'expectedDeliveryTime': newTrade.expectedDeliveryTime,
+        'hoursPerDay': newTrade.hoursPerDay,
+        'isFav': newTrade.isFav,
+      });
+
+      // Step 3: Update the trade lists to reflect the changes
+      updateTradeLists();
+      res = 'Response Trade Posted';
     } catch (e) {
       return e.toString();
     }
