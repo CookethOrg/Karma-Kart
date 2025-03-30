@@ -27,11 +27,8 @@ class SupabaseService extends StateHandler {
     }
 
     try {
-      final response = await supabase
-          .from('User')
-          .select('name')
-          .eq('id', user.id)
-          .single();
+      final response =
+          await supabase.from('User').select('name').eq('id', user.id).single();
 
       print("Fetched user name: $response");
       return response;
@@ -176,6 +173,7 @@ class SupabaseService extends StateHandler {
   Future<void> logout() async {
     try {
       await supabase.auth.signOut();
+      dispose();
     } catch (e) {
       throw Exception('Error logging out: ${e.toString()}');
     }

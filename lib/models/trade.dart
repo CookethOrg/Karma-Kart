@@ -11,7 +11,7 @@ class Trade {
   int hoursPerDay;
   bool isFav;
   TradeProgress tradeProgress;
-  String approachee;
+  String? approachee;
   bool isLive;
   String? responseTradeId;
 

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:karmakart/models/trade.dart';
 import 'package:karmakart/providers/trade_provider.dart';
 import 'package:karmakart/screens/accept_trade_page.dart';
+import 'package:karmakart/screens/dashboard_page.dart';
 import 'package:karmakart/screens/profile.dart';
 import 'package:provider/provider.dart';
 
@@ -255,12 +256,7 @@ class RequestTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<TradeProvider>(
       builder: (context, tp, child) {
-        return FutureBuilder(
-          future: tp.fetchResponseTrade(trade),
-          builder: (context, snapshot) {
-            var tr = snapshot.data;
-            print(tr);
-            return Container(
+        return Container(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
               margin: EdgeInsets.symmetric(horizontal: 80.w),
               decoration: BoxDecoration(
@@ -306,10 +302,12 @@ class RequestTile extends StatelessWidget {
                   ),
                   // Accept button
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      var res = await tp.acceptTrade(trade);
+                      print(res);
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => AcceptTradePage(trade: trade),
+                          builder: (context) => DashboardPage(),
                         ),
                       );
                     },
@@ -323,7 +321,7 @@ class RequestTile extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20.r),
                       ),
                       child: Text(
-                        'View Response Trade',
+                        'Accept Trade',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 24.sp,
@@ -337,7 +335,5 @@ class RequestTile extends StatelessWidget {
             );
           },
         );
-      },
-    );
   }
 }

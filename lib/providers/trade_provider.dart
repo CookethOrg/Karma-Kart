@@ -171,7 +171,7 @@ class TradeProvider extends StateHandler {
   }
 
   Future<String> fetchApproacheeUserName(Trade trade) async {
-    final id = trade.approachee;
+    final id = trade.approachee!;
     final res =
         await supabaseClient.from('User').select('name').eq('id', id).single();
     return res['name'];
@@ -181,11 +181,22 @@ class TradeProvider extends StateHandler {
     final id = trade.responseTradeId;
     // final uid = supabaseClient.auth.currentUser!.id;
     final res =
-        await supabaseClient
-            .from('Trade')
-            .select().eq('tradeId', id!)
-            .single();
+        await supabaseClient.from('Trade').select().eq('tradeId', id!).single();
     print('Response trade: $res');
+    return res;
+  }
+
+  Future<String> acceptTrade(Trade trade) async {
+    String res = '';
+    try {
+      res = await supabaseClient
+          .from('Trade')
+          .update({'tradeProgress': 'TradeProgress.ongoing', 'isLive': false})
+          .eq('tradeId', trade.tradeId);
+      updateTradeLists();
+    } catch (e) {
+      return e.toString();
+    }
     return res;
   }
 
@@ -241,7 +252,7 @@ class TradeProvider extends StateHandler {
       final newTrade = Trade(
         tradeProgress: TradeProgress.live,
         responseTradeId: null,
-        approachee: '',
+        approachee: null,
         tradeId: txid,
         heading: heading,
         clientUserId: userId!,
@@ -255,6 +266,7 @@ class TradeProvider extends StateHandler {
         'tradeId': newTrade.tradeId,
         'clientUserId': newTrade.clientUserId,
         'heading': newTrade.heading,
+        'responseTradeId' : newTrade.responseTradeId,
         'description': newTrade.description,
         'tradeProgress': newTrade.tradeProgress.toString(),
         'approachee': newTrade.approachee,
@@ -262,7 +274,6 @@ class TradeProvider extends StateHandler {
         'price': newTrade.price,
         'expectedDeliveryTime': newTrade.expectedDeliveryTime,
         'hoursPerDay': newTrade.hoursPerDay,
-        // 'urgency': newTrade.urgency,
         'isFav': newTrade.isFav,
       });
       updateTradeLists();
@@ -319,6 +330,7 @@ class TradeProvider extends StateHandler {
       await supabaseClient.from('Trade').insert({
         'tradeId': newTrade.tradeId,
         'clientUserId': newTrade.clientUserId,
+        'responseTradeId' : newTrade.responseTradeId,
         'heading': newTrade.heading,
         'description': newTrade.description,
         'tradeProgress':

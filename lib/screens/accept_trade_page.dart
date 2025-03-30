@@ -302,7 +302,7 @@ class RequestTile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20.r),
               ),
               child: Text(
-                'View Response Trade',
+                'Accept Trade',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 24.sp,
