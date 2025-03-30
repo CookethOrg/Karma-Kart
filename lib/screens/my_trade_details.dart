@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:karmakart/models/trade.dart';
 
 class TradeDetails extends StatelessWidget {
-  const TradeDetails({super.key});
+  Trade trade;
+  TradeDetails({super.key,required this.trade});
 
   @override
   Widget build(BuildContext context) {
@@ -114,26 +116,27 @@ class TradeDetails extends StatelessWidget {
             SizedBox(height: 8.h),
             Wrap(
               spacing: 8.w,
-              children: tags.map((tag) {
-                return Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.w,
-                    vertical: 6.h,
-                  ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF0F1120),
-                    borderRadius: BorderRadius.circular(16.r),
-                  ),
-                  child: Text(
-                    tag,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                );
-              }).toList(),
+              children:
+                  tags.map((tag) {
+                    return Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12.w,
+                        vertical: 6.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF0F1120),
+                        borderRadius: BorderRadius.circular(16.r),
+                      ),
+                      child: Text(
+                        tag,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    );
+                  }).toList(),
             ),
           ],
         ),
@@ -174,7 +177,11 @@ class TradeDetails extends StatelessWidget {
             // Duration section
             buildDurationRow('Duration', '23/04/2025', '23/04/2025'),
             // Project Tags section
-            buildTagsSection('Project Tags', ['UI/UX', 'Development', 'Flutter']),
+            buildTagsSection('Project Tags', [
+              'UI/UX',
+              'Development',
+              'Flutter',
+            ]),
             // Proposed Karma Points section
             Padding(
               padding: EdgeInsets.only(bottom: 16.h),
@@ -216,7 +223,7 @@ class TradeDetails extends StatelessWidget {
               ),
             ),
             // Requests header
-            SizedBox(height: 16.h,),
+            SizedBox(height: 16.h),
             Text(
               'Requests',
               style: TextStyle(

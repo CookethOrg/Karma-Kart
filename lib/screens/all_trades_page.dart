@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:karmakart/core/widgets/bottom_nav_bar.dart';
 import 'package:karmakart/core/widgets/dashboard_search_bar.dart';
 import 'package:karmakart/core/widgets/drawers/dashboard_drawer.dart';
 import 'package:karmakart/core/widgets/trade_card.dart';
@@ -7,6 +8,8 @@ import 'package:karmakart/providers/trade_provider.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
 import 'package:karmakart/screens/create_trade.dart';
 import 'package:karmakart/screens/dashboard_page.dart';
+import 'package:karmakart/screens/profile.dart';
+import 'package:karmakart/screens/recommended_for_you_page.dart';
 import 'package:karmakart/screens/trade_details_page.dart';
 import 'package:provider/provider.dart';
 import 'package:radix_icons/radix_icons.dart';
@@ -20,7 +23,7 @@ class AllTradesPage extends StatefulWidget {
 
 class _AllTradesPageState extends State<AllTradesPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  int _selectedIndex = 0;
+  int _selectedIndex = 3;
   int _selectedTabIndex = 0; // To track which tab is selected
 
   @override
@@ -51,7 +54,45 @@ class _AllTradesPageState extends State<AllTradesPage> {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavBar(),
+      bottomNavigationBar: CustomBottomNavBar(
+            selectedIndex: _selectedIndex,
+            onItemSelected: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+              // Handle navigation logic here
+              switch (index) {
+                case 0:
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => DashboardPage()),
+                  );
+                  print("Navigating to Home");
+                  break;
+                case 1:
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => RecommendedForYouPage(),
+                    ),
+                  );
+                  print("Navigating to Sync");
+                  break;
+                case 2:
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => TradeCreationPage(),
+                    ),
+                  );
+                case 3:
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => AllTradesPage()),
+                  );
+                case 4:
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ProfilePage()),
+                  );
+              }
+            },
+          ),
     );
   }
 
@@ -257,73 +298,4 @@ class _AllTradesPageState extends State<AllTradesPage> {
     );
   }
 
-  Widget _buildBottomNavBar() {
-    return Container(
-      color: Color(0xFF0F1120),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _navBarItem(Icons.home, "Home", 0),
-            _navBarItem(Icons.sync, "Sync", 1),
-            _centerActionButton(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _navBarItem(IconData icon, String label, int index) {
-    bool isSelected = _selectedIndex == index;
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedIndex = index;
-        });
-        _onNavItemTapped(index);
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: isSelected ? Colors.white : Color(0xFF656678)),
-          SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              color: isSelected ? Colors.white : Color(0xFF656678),
-              fontSize: 12,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _centerActionButton() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(
-          context,
-        ).push(MaterialPageRoute(builder: (context) => TradeCreationPage()));
-      },
-      child: Container(
-        decoration: BoxDecoration(color: Colors.purple, shape: BoxShape.circle),
-        padding: const EdgeInsets.all(8.0),
-        child: Icon(Icons.add, color: Colors.white),
-      ),
-    );
-  }
-
-  void _onNavItemTapped(int index) {
-    // Handle navigation logic here
-    switch (index) {
-      case 0:
-        print("Navigating to Home");
-        break;
-      case 1:
-        print("Navigating to Sync");
-        break;
-    }
-  }
 }

@@ -115,7 +115,7 @@ class TradeProvider extends StateHandler {
       var response = await supabaseClient
           .from('Trade')
           .select()
-          .eq('tradeProgress', 'live');
+          .eq('tradeProgress', 'TradeProgress.live');
       var ures = await supabaseClient
           .from('Trade')
           .select()
