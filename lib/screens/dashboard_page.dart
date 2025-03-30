@@ -60,6 +60,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         _buildRecommendedSection(),
                         SizedBox(height: 24),
                         _buildTradesSection(),
+                        SizedBox(height: 24,),
+                        _buildYourTradesSection()
                       ],
                     );
                   },
@@ -274,7 +276,7 @@ class _DashboardPageState extends State<DashboardPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Your Trades',
+                  'Posted Trades',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -303,6 +305,62 @@ class _DashboardPageState extends State<DashboardPage> {
               child: Row(
                 children:
                     tp.postedTrades
+                        .map(
+                          (trade) => Padding(
+                            padding: EdgeInsets.only(right: 16),
+                            child: TradeCard(
+                              trade: trade,
+                              cardType: TradeCardType.active,
+                            ),
+                          ),
+                        )
+                        .toList(),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildYourTradesSection() {
+    return Consumer<TradeProvider>(
+      builder: (context, tp, child) {
+        return Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Your Trades',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => AllTradesPage()),
+                    );
+                  },
+                  child: Text(
+                    'View More >',
+                    style: TextStyle(
+                      color: const Color(0xff874fff),
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children:
+                    tp.yourTrades
                         .map(
                           (trade) => Padding(
                             padding: EdgeInsets.only(right: 16),

@@ -19,41 +19,7 @@ class TradeProvider extends StateHandler {
   final List<Trade> _tradeList = [];
   final List<Trade> _postedTrades = [];
   bool _isLoading = false;
-  final List<Trade> _yourTrades = [
-    Trade(
-      tradeId: '1',
-      tradeProgress: TradeProgress.ongoing,
-      approachee: '2',
-      clientUserId: 'clientUserId',
-      heading: 'heading',
-      description: 'description',
-      price: 1,
-      expectedDeliveryTime: 'expectedDeliveryTime',
-      tags: [],
-    ),
-    Trade(
-      tradeId: '2',
-      clientUserId: 'clientUserId',
-      tradeProgress: TradeProgress.ongoing,
-      approachee: '2',
-      heading: 'heading',
-      description: 'description',
-      price: 1,
-      expectedDeliveryTime: 'expectedDeliveryTime',
-      tags: [],
-    ),
-    Trade(
-      tradeId: '3',
-      clientUserId: 'clientUserId',
-      tradeProgress: TradeProgress.ongoing,
-      approachee: '2',
-      heading: 'heading',
-      description: 'description',
-      price: 1,
-      expectedDeliveryTime: 'expectedDeliveryTime',
-      tags: [],
-    ),
-  ];
+  final List<Trade> _yourTrades = [];
 
   // Other trade data
   // DateTime? _startDate;
@@ -120,9 +86,14 @@ class TradeProvider extends StateHandler {
           .from('Trade')
           .select()
           .eq('clientUserId', res.id);
+      var yourTrades = await supabaseClient
+          .from('Trade')
+          .select()
+          .eq('approachee', res.id).eq('tradeProgress', 'TradeProgress.ongoing');
       print('Supabase response received: $response');
       List<Map<String, dynamic>> dbTradeList = response;
       List<Map<String, dynamic>> dbPostedTradeList = ures;
+      List<Map<String, dynamic>> dbYourTrades = yourTrades;
       print('Cast response to list');
       for (var trade in dbTradeList) {
         _tradeList.add(Trade.fromJson(trade));
@@ -131,6 +102,10 @@ class TradeProvider extends StateHandler {
 
       for (var trade in dbPostedTradeList) {
         _postedTrades.add(Trade.fromJson(trade));
+      }
+
+      for (var trade in dbYourTrades) {
+        _yourTrades.add(Trade.fromJson(trade));
       }
       print('tradelist : $_tradeList');
       notifyListeners();
@@ -147,7 +122,7 @@ class TradeProvider extends StateHandler {
     var response = await supabaseClient
         .from('Trade')
         .select()
-        .eq('tradeProgress', 'live');
+        .eq('tradeProgress', 'TradeProgress.live');
     var ures = await supabaseClient
         .from('Trade')
         .select()
