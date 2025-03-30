@@ -8,6 +8,7 @@ import 'package:karmakart/providers/trade_provider.dart';
 import 'package:karmakart/providers/authentication_provider.dart';
 import 'package:karmakart/screens/create_trade.dart';
 import 'package:karmakart/screens/dashboard_page.dart';
+import 'package:karmakart/screens/my_trade_details.dart';
 import 'package:karmakart/screens/profile.dart';
 import 'package:karmakart/screens/recommended_for_you_page.dart';
 import 'package:karmakart/screens/trade_details_page.dart';
@@ -24,7 +25,7 @@ class AllTradesPage extends StatefulWidget {
 class _AllTradesPageState extends State<AllTradesPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 3;
-  int _selectedTabIndex = 0; // To track which tab is selected
+  int selectedTabIndex = 0; // To track which tab is selected
 
   @override
   Widget build(BuildContext context) {
@@ -55,44 +56,42 @@ class _AllTradesPageState extends State<AllTradesPage> {
         ),
       ),
       bottomNavigationBar: CustomBottomNavBar(
-            selectedIndex: _selectedIndex,
-            onItemSelected: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-              // Handle navigation logic here
-              switch (index) {
-                case 0:
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => DashboardPage()),
-                  );
-                  print("Navigating to Home");
-                  break;
-                case 1:
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => RecommendedForYouPage(),
-                    ),
-                  );
-                  print("Navigating to Sync");
-                  break;
-                case 2:
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => TradeCreationPage(),
-                    ),
-                  );
-                case 3:
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => AllTradesPage()),
-                  );
-                case 4:
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ProfilePage()),
-                  );
-              }
-            },
-          ),
+        selectedIndex: _selectedIndex,
+        onItemSelected: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+          // Handle navigation logic here
+          switch (index) {
+            case 0:
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (context) => DashboardPage()));
+              print("Navigating to Home");
+              break;
+            case 1:
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => RecommendedForYouPage(),
+                ),
+              );
+              print("Navigating to Sync");
+              break;
+            case 2:
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => TradeCreationPage()),
+              );
+            case 3:
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (context) => AllTradesPage()));
+            case 4:
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (context) => ProfilePage()));
+          }
+        },
+      ),
     );
   }
 
@@ -155,11 +154,11 @@ class _AllTradesPageState extends State<AllTradesPage> {
   }
 
   Widget _buildTab(String title, int index) {
-    bool isSelected = _selectedTabIndex == index;
+    bool isSelected = selectedTabIndex == index;
     return GestureDetector(
       onTap: () {
         setState(() {
-          _selectedTabIndex = index;
+          selectedTabIndex = index;
         });
       },
       child: Column(
@@ -186,9 +185,21 @@ class _AllTradesPageState extends State<AllTradesPage> {
     );
   }
 
-  Widget _buildTradeCard(Trade trade) {
+  Widget _buildTradeCard(Trade trade, int idx) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => TradeDetailsPage(trade: trade),)),
+      onTap: () {
+        idx == 0
+            ? Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => TradeDetailsPage(trade: trade),
+              ),
+            )
+            : Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => TradeDetails(trade: trade),
+              ),
+            );
+      },
       child: Container(
         margin: EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
@@ -251,7 +262,7 @@ class _AllTradesPageState extends State<AllTradesPage> {
     // Choose which data to display based on selected tab
     final TradeProvider tp = Provider.of<TradeProvider>(context, listen: false);
     final dataToDisplay =
-        _selectedTabIndex == 0 ? tp.yourTrades : tp.postedTrades;
+        selectedTabIndex == 0 ? tp.yourTrades : tp.postedTrades;
 
     if (dataToDisplay.isEmpty) {
       return Center(
@@ -266,7 +277,10 @@ class _AllTradesPageState extends State<AllTradesPage> {
     }
 
     return Column(
-      children: dataToDisplay.map((trade) => _buildTradeCard(trade)).toList(),
+      children:
+          dataToDisplay
+              .map((trade) => _buildTradeCard(trade, selectedTabIndex))
+              .toList(),
     );
   }
 
@@ -297,5 +311,4 @@ class _AllTradesPageState extends State<AllTradesPage> {
       ],
     );
   }
-
 }

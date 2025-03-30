@@ -89,7 +89,8 @@ class TradeProvider extends StateHandler {
       var yourTrades = await supabaseClient
           .from('Trade')
           .select()
-          .eq('approachee', res.id).eq('tradeProgress', 'TradeProgress.ongoing');
+          .eq('approachee', res.id)
+          .eq('tradeProgress', 'TradeProgress.ongoing');
       print('Supabase response received: $response');
       List<Map<String, dynamic>> dbTradeList = response;
       List<Map<String, dynamic>> dbPostedTradeList = ures;
@@ -127,11 +128,18 @@ class TradeProvider extends StateHandler {
         .from('Trade')
         .select()
         .eq('clientUserId', res!.id);
+    var yourTrades = await supabaseClient
+        .from('Trade')
+        .select()
+        .eq('approachee', res.id)
+        .eq('tradeProgress', 'TradeProgress.ongoing');
+    List<Map<String, dynamic>> dbYourTrades = yourTrades;
     List<Map<String, dynamic>> dbTradeList = response;
     List<Map<String, dynamic>> dbPostedTradeList = ures;
     print('Cast response to list');
     _tradeList.clear();
     _postedTrades.clear();
+    _yourTrades.clear();
     for (var trade in dbTradeList) {
       _tradeList.add(Trade.fromJson(trade));
       print('Added trade: ${trade['tradeId']}');
@@ -139,6 +147,9 @@ class TradeProvider extends StateHandler {
 
     for (var trade in dbPostedTradeList) {
       _postedTrades.add(Trade.fromJson(trade));
+    }
+    for (var trade in dbYourTrades) {
+      _yourTrades.add(Trade.fromJson(trade));
     }
     print('tradelist : $_tradeList');
     notifyListeners();
@@ -157,6 +168,25 @@ class TradeProvider extends StateHandler {
     final res =
         await supabaseClient.from('User').select('name').eq('id', id).single();
     return res['name'];
+  }
+
+  Future<String> fetchApproacheeUserName(Trade trade) async {
+    final id = trade.approachee;
+    final res =
+        await supabaseClient.from('User').select('name').eq('id', id).single();
+    return res['name'];
+  }
+
+  Future<Map> fetchResponseTrade(Trade trade) async {
+    final id = trade.responseTradeId;
+    // final uid = supabaseClient.auth.currentUser!.id;
+    final res =
+        await supabaseClient
+            .from('Trade')
+            .select().eq('tradeId', id!)
+            .single();
+    print('Response trade: $res');
+    return res;
   }
 
   // Remove a tag
@@ -210,6 +240,7 @@ class TradeProvider extends StateHandler {
       final userId = supabaseClient.auth.currentUser?.id;
       final newTrade = Trade(
         tradeProgress: TradeProgress.live,
+        responseTradeId: null,
         approachee: '',
         tradeId: txid,
         heading: heading,
@@ -257,20 +288,21 @@ class TradeProvider extends StateHandler {
       if (approacheeId == null) {
         return 'No authenticated user found';
       }
-
+      String txid = const Uuid().v4();
       await supabaseClient
           .from('Trade')
           .update({
             'approachee': approacheeId,
-            'tradeProgress':
-                TradeProgress.negotiation.toString(), // Set to negotiation
+            'tradeProgress': TradeProgress.negotiation.toString(),
+            'responseTradeId': txid, // Set to negotiation
           })
           .eq('tradeId', originalTrade.tradeId);
 
       // Step 2: Create a new response trade with tradeProgress as negotiation
-      String txid = const Uuid().v4();
+
       final newTrade = Trade(
-        tradeProgress: TradeProgress.negotiation, // Set to negotiation
+        tradeProgress: TradeProgress.negotiation,
+        responseTradeId: null, // Set to negotiation
         approachee:
             originalTrade
                 .clientUserId, // Original creator becomes the approachee

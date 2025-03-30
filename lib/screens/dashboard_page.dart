@@ -9,6 +9,7 @@ import 'package:karmakart/providers/authentication_provider.dart';
 import 'package:karmakart/providers/trade_provider.dart';
 import 'package:karmakart/screens/all_trades_page.dart';
 import 'package:karmakart/screens/create_trade.dart';
+import 'package:karmakart/screens/my_trade_details.dart';
 import 'package:karmakart/screens/profile.dart';
 import 'package:karmakart/screens/trade_details_page.dart';
 import 'package:provider/provider.dart';
@@ -60,8 +61,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         _buildRecommendedSection(),
                         SizedBox(height: 24),
                         _buildTradesSection(),
-                        SizedBox(height: 24,),
-                        _buildYourTradesSection()
+                        SizedBox(height: 24),
+                        _buildYourTradesSection(),
                       ],
                     );
                   },
@@ -306,11 +307,21 @@ class _DashboardPageState extends State<DashboardPage> {
                 children:
                     tp.postedTrades
                         .map(
-                          (trade) => Padding(
-                            padding: EdgeInsets.only(right: 16),
-                            child: TradeCard(
-                              trade: trade,
-                              cardType: TradeCardType.active,
+                          (trade) => GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => TradeDetails(trade: trade),
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 16),
+                              child: TradeCard(
+                                trade: trade,
+                                cardType: TradeCardType.active,
+                              ),
                             ),
                           ),
                         )

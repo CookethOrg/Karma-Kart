@@ -13,6 +13,7 @@ class Trade {
   TradeProgress tradeProgress;
   String approachee;
   bool isLive;
+  String? responseTradeId;
 
   Trade({
     required this.tradeId,
@@ -27,6 +28,7 @@ class Trade {
     required this.tradeProgress,
     this.isFav = false,
     this.isLive = true,
+    required this.responseTradeId
   });
 
   Map<String, dynamic> toJson() {
@@ -40,6 +42,7 @@ class Trade {
       "expectedDeliveryTime": expectedDeliveryTime,
       "hoursPerDay": hoursPerDay,
       'approachee': approachee,
+      'responseTradeId' : responseTradeId,
       'tradeProgress': tradeProgress.toString().split('.').last, // e.g., "live"
       "isFav": isFav,
       'isLive': isLive,
@@ -57,17 +60,21 @@ class Trade {
         (e) => e.toString().split('.').last == json['tradeProgress'],
         orElse: () => TradeProgress.live, // Default value if no match
       ),
-      approachee: json['approachee'] == null ? '' : json['approachee'].toString(),
-      price: json["price"] is int
-          ? (json["price"] as int).toDouble()
-          : json["price"],
+      approachee:
+          json['approachee'] == null ? '' : json['approachee'].toString(),
+      price:
+          json["price"] is int
+              ? (json["price"] as int).toDouble()
+              : json["price"],
       tags: (json["tags"] as List).map((item) => item.toString()).toList(),
       expectedDeliveryTime: json["expectedDeliveryTime"],
-      hoursPerDay: json["hoursPerDay"] is int
-          ? json["hoursPerDay"]
-          : int.parse(json["hoursPerDay"].toString()),
+      hoursPerDay:
+          json["hoursPerDay"] is int
+              ? json["hoursPerDay"]
+              : int.parse(json["hoursPerDay"].toString()),
       isFav: json["isFav"] is bool ? json["isFav"] : json["isFav"] == true,
       isLive: json["isLive"] is bool ? json["isLive"] : json["isLive"] == true,
+      responseTradeId : json['responseTradeId']
     );
   }
 }

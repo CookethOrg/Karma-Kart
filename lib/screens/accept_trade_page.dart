@@ -2,17 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:karmakart/models/trade.dart';
 import 'package:karmakart/providers/trade_provider.dart';
-import 'package:karmakart/screens/accept_trade_page.dart';
 import 'package:karmakart/screens/profile.dart';
 import 'package:provider/provider.dart';
 
-class TradeDetails extends StatelessWidget {
+class AcceptTradePage extends StatelessWidget {
   Trade trade;
-  TradeDetails({super.key, required this.trade});
+  AcceptTradePage({super.key, required this.trade});
 
   @override
   Widget build(BuildContext context) {
-    final tr = trade;
     Widget buildDetailRow(String label, String value, {IconData? icon}) {
       return Padding(
         padding: EdgeInsets.only(bottom: 12.h),
@@ -230,7 +228,7 @@ class TradeDetails extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       buildMainContent(),
-                      RequestTile(name: name ?? 'Approachee Name', trade: tr),
+                      RequestTile(name: name ?? 'Approachee Name'),
                       // SizedBox(height: 16.h),
                     ],
                   ),
@@ -247,97 +245,74 @@ class TradeDetails extends StatelessWidget {
 // Separate widget for the Request tile
 class RequestTile extends StatelessWidget {
   final String name;
-  Trade trade;
 
-  RequestTile({super.key, required this.name, required this.trade});
+  const RequestTile({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<TradeProvider>(
-      builder: (context, tp, child) {
-        return FutureBuilder(
-          future: tp.fetchResponseTrade(trade),
-          builder: (context, snapshot) {
-            var tr = snapshot.data;
-            print(tr);
-            return Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-              margin: EdgeInsets.symmetric(horizontal: 80.w),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+      margin: EdgeInsets.symmetric(horizontal: 80.w),
+      decoration: BoxDecoration(
+        color: const Color(0xFF101123),
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Avatar and Name
+          GestureDetector(
+            onTap:
+                () => Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (context) => ProfilePage())),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 40.r,
+                  backgroundColor: Colors.grey,
+                  child: Text(
+                    name[0],
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 30.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 12.w),
+                Text(
+                  name,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Accept button
+          GestureDetector(
+            onTap: () {},
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
               decoration: BoxDecoration(
-                color: const Color(0xFF101123),
-                borderRadius: BorderRadius.circular(8.r),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20.r),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Avatar and Name
-                  GestureDetector(
-                    onTap:
-                        () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ProfilePage(),
-                          ),
-                        ),
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 40.r,
-                          backgroundColor: Colors.grey,
-                          child: Text(
-                            name[0],
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 30.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 12.w),
-                        Text(
-                          name,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Accept button
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => AcceptTradePage(trade: trade),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16.w,
-                        vertical: 8.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20.r),
-                      ),
-                      child: Text(
-                        'View Response Trade',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+              child: Text(
+                'View Response Trade',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 24.sp,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            );
-          },
-        );
-      },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
