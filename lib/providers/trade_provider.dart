@@ -147,7 +147,7 @@ class TradeProvider extends StateHandler {
     var response = await supabaseClient
         .from('Trade')
         .select()
-        .eq('isLive', true);
+        .eq('tradeProgress', 'live');
     var ures = await supabaseClient
         .from('Trade')
         .select()
@@ -277,7 +277,7 @@ class TradeProvider extends StateHandler {
   }) async {
     String res = 'Some error occurred';
     try {
-      // Step 1: Update the original trade's approachee field with the current user's ID
+      // Step 1: Update the original trade's approachee and tradeProgress
       final approacheeId = supabaseClient.auth.currentUser?.id;
       if (approacheeId == null) {
         return 'No authenticated user found';
@@ -285,13 +285,17 @@ class TradeProvider extends StateHandler {
 
       await supabaseClient
           .from('Trade')
-          .update({'approachee': approacheeId})
+          .update({
+            'approachee': approacheeId,
+            'tradeProgress':
+                TradeProgress.negotiation.toString(), // Set to negotiation
+          })
           .eq('tradeId', originalTrade.tradeId);
 
-      // Step 2: Create a new response trade
+      // Step 2: Create a new response trade with tradeProgress as negotiation
       String txid = const Uuid().v4();
       final newTrade = Trade(
-        tradeProgress: TradeProgress.live,
+        tradeProgress: TradeProgress.negotiation, // Set to negotiation
         approachee:
             originalTrade
                 .clientUserId, // Original creator becomes the approachee
@@ -310,7 +314,8 @@ class TradeProvider extends StateHandler {
         'clientUserId': newTrade.clientUserId,
         'heading': newTrade.heading,
         'description': newTrade.description,
-        'tradeProgress': newTrade.tradeProgress.toString(),
+        'tradeProgress':
+            newTrade.tradeProgress.toString(), // Set to negotiation
         'approachee': newTrade.approachee,
         'tags': newTrade.tags,
         'price': newTrade.price,
